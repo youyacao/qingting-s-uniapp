@@ -1,0 +1,1 @@
+export const BASE_URL = 'https://qingtingapi.youyacao.com/api/v1/'

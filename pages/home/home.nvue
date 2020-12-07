@@ -1,0 +1,62 @@
+<template>
+	<view class="body">
+		<swiper :style="{'height': `${windowHeight}px`}" :disable-touch="disabled">
+			<swiper-item>
+				<v-player :list="list"></v-player>
+			</swiper-item>
+			<swiper-item>
+				<view class="swiper-item">2</view>
+			</swiper-item>
+		</swiper>
+		<view class="nav-box">
+			<v-tabbar></v-tabbar>
+		</view>
+	</view>
+</template>
+
+<script>
+	import { mapGetters, mapMutations } from 'vuex'
+	import { VideoList } from '@/common/api.js'
+	import VPlayer from '@/components/v-player/v-player'
+	import VTabbar from '@/components/v-tabbar/v-tabbar.nvue'
+	
+	export default {
+		data() {
+			return {
+				disabled: false,
+				list: []
+			};
+		},
+		computed: {
+			...mapGetters(['windowHeight'])
+		},
+		components: { VPlayer, VTabbar },
+		onLoad() {
+			uni.hideTabBar()
+			VideoList().then(({ data, code }) => {
+				if (code === 200) {
+					this.list = data.list
+				}
+			})
+		},
+		onShow() {
+			this.setLeave(false)
+		},
+		methods: {
+			...mapMutations(['setLeave'])
+		},
+		onHide() {
+			this.setLeave(true)
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.nav-box {
+		position: fixed;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background-color: rgba($color: #000000, $alpha: 0.2);
+	}
+</style>
