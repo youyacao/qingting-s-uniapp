@@ -1,6 +1,6 @@
 <template>
 	<view class="body" :style="{'height': `${windowHeight}px`}">
-		<live-pusher :style="{'height': `${windowHeight}px`}" id='livePusher' ref="livePusher" class="livePusher" :url="url" mode="SD" :muted="true" :enable-camera="true"
+		<live-pusher :style="{'height': `${windowHeight}px`}" id='livePusher' ref="livePusher" class="livePusher" :url="url" :mode="modeList[pusherMode]" :muted="true" :enable-camera="true"
 		 :auto-focus="true" :beauty="1" whiteness="2" aspect="9:16" @statechange="statechange" @netstatus="netstatus" @error="error"></live-pusher>
 		<!-- <view class="btn-list">
 			<button class="btn" @tap="start">{{ status ? '正在推流' : '开始推流' }}</button>
@@ -41,7 +41,7 @@
 
 <script>
 	const modal = weex.requireModule('modal')
-	import { mapGetters } from 'vuex'
+	import { mapGetters, mapState } from 'vuex'
 	import { StartLive } from '@/common/api.js'
 	
 	export default {
@@ -49,7 +49,8 @@
 			return {
 				url: '',
 				context: null,
-				status: false
+				status: false,
+				modeList: ['SD', 'HD', 'FHD']
 			};
 		},
 		onReady() {
@@ -63,7 +64,8 @@
 			this.url = options.url
 		},
 		computed: {
-			...mapGetters(['windowHeight', 'statusBarHeight'])
+			...mapGetters(['windowHeight', 'statusBarHeight']),
+			...mapState(['pusherMode'])
 		},
 		methods: {
 			_alert() {

@@ -30,6 +30,7 @@
 	import { BASE_URL } from '@/common/config.js'
 	import { StartLive } from '@/common/api.js'
 	import { getToken } from '@/common/common.js'
+	import { mapMutations } from 'vuex'
 	
 	export default {
 		data() {
@@ -65,6 +66,7 @@
 			};
 		},
 		methods: {
+			...mapMutations(['setPusherMode']),
 			_submit() {
 				if (!this.title) {
 					return this.$refs.uToast.show({
@@ -124,7 +126,7 @@
 			},
 			// 选中任一radio时，由radio-group触发
 			radioGroupChange(e) {
-				// console.log(e);
+				this.setPusherMode(e)
 			}
 		}
 	}

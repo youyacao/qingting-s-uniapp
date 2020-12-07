@@ -4,7 +4,7 @@
 			<u-input v-model="content" type="textarea" height="250" auto-height placeholder="此刻的想法..." />
 		</view>
 		<view class="upload-box">
-			<u-upload :auto-upload="false" max-count="6" @on-choose-complete="onChooseComplete" @on-remove="onRemove"></u-upload>
+			<u-upload ref="uUpload" :auto-upload="false" max-count="6" @on-choose-complete="onChooseComplete" @on-remove="onRemove"></u-upload>
 		</view>
 		<u-cell-item icon="grid" :title="selectItem.label" @click="show = true"></u-cell-item>
 		<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="_confirm"></u-select>
@@ -78,7 +78,9 @@
 				    title: '上传中'
 				})
 				let _length = 0
-				lists.map(item => {
+				let _count = 0
+				let _errIndex = []
+				lists.map((item, index) => {
 					uni.uploadFile({
 						url: `${BASE_URL}upload`,
 						filePath: item.url,
@@ -89,22 +91,36 @@
 						success: (uploadFileRes) => {
 							const { code, data } = JSON.parse(uploadFileRes.data)
 							if (code === 200) {
-								console.log('>>>>>>>', data)
-								this.fileList.push(data.url)
+								_length++
+								if (data.url) {
+									this.fileList.push(data.url)
+								}
+							} else {
+								_errIndex.push(index)
 							}
 						},
 						fail: (error) => {
-							console.log(error)
+							_errIndex.push(index)
 						},
 						complete: () => {
-							_length++
-							if (_length === lists.length) {
-								console.log(this.fileList)
-								uni.hideLoading()
-								this.$refs.uToast.show({
-									title: '上传成功',
-									type: 'success'
-								})
+							_count++
+							if (_count === lists.length - 1) {
+								if (_length === lists.length) {
+									uni.hideLoading()
+									this.$refs.uToast.show({
+										title: '上传成功',
+										type: 'success'
+									})
+								} else {
+									uni.hideLoading()
+									this.$refs.uToast.show({
+										title: `成功上传${_length}张，${lists.length - _length}张上传失败`,
+										type: 'success'
+									})
+									_errIndex.map(item => {
+										this.$refs.uUpload.remove(item)
+									})
+								}
 							}
 						}
 					})

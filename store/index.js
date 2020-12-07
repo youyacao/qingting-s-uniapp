@@ -17,7 +17,8 @@ const store = new Vuex.Store({
 			desc: '',
 			is_vip: 0
 		},
-		path: '/pages/home/home'
+		path: '/pages/home/home',
+		pusherMode: 0
 	},
 	mutations: {
 		setSystemInfo(state, data) {
@@ -38,6 +39,9 @@ const store = new Vuex.Store({
 		},
 		setPath(state, path) {
 			state.path = path
+		},
+		setPusherMode(state, data) {
+			state.pusherMode = data
 		}
 	},
 	actions: {

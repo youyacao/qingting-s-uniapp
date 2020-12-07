@@ -227,7 +227,6 @@
 	}
 	.head {
 		display: flex;
-		border-top: 1rpx solid #808080;
 		padding: 32rpx;
 	}
 	.body {

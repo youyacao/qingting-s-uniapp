@@ -1,6 +1,9 @@
 <template>
 	<view class="body">
 		<list class="list">
+			<cell>
+				<view style="height: 32rpx;"></view>
+			</cell>
 			<cell v-for="(item, index) in list" :key="index">
 				<view class="item-box">
 					<view class="item" v-for="(_item, _index) in item" :key="`item_${_index}`" @tap="_playLive(_item)">
@@ -99,7 +102,6 @@
 		text-align: center;
 		color: #808080;
 		font-size: 28rpx;
-		margin-top: 32rpx;
 	}
 	.title {
 		color: #FFFFFF;

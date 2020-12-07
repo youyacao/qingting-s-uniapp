@@ -1,6 +1,6 @@
 <template>
 	<view class="body">
-		<!-- <image class="poster" :src="video.thumb" :lazy-load="true" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}" v-if="!isPlay"></image> -->
+		<image class="poster" :src="video.thumb" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}" v-if="!isPlay"></image>
 		<video id="video" src="" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}"
 			:controls="controls"
 			:show-center-play-btn="false"
