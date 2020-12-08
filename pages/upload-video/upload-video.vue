@@ -4,10 +4,10 @@
 			<textarea class="textarea" placeholder="请输入标题~" v-model="title" />
 			<view class="head-right" @tap="_chooseVideo">
 				<view class="video-box">
-					<video class="video" :src="src" v-if="src" :controls="false" autoplay></video>
+					<video class="video" id="video" :src="src" v-if="src" :controls="false" autoplay></video>
 					<image class="add-icon" src="/static/images/add-icon-1.png" mode="" v-else></image>
 				</view>
-				<view class="progress-box">
+				<view class="progress-box" v-if="uploadProgress">
 					<text class="progress-text">{{ uploadProgress }}%</text>
 				</view>
 			</view>
@@ -51,7 +51,8 @@
 				},
 				title: '',
 				loading: false,
-				uploadProgress: 0
+				uploadProgress: 0,
+				videoContext: null
 			};
 		},
 		components: { VTabbar },
@@ -60,6 +61,9 @@
 			this._getCategories()
 		},
 		onShow() {
+			if (this.videoContext) {
+				this.videoContext.play()
+			}
 			this.updateUserinfo()
 		},
 		methods: {
@@ -70,6 +74,7 @@
 					sourceType: ['camera', 'album'],
 					success: (res) => {
 						this.src = res.tempFilePath
+						this.videoContext = uni.createVideoContext('video', this)
 						this._uploadVideo()
 					}
 				})
@@ -119,11 +124,14 @@
 						this.title = ''
 						this.src = ''
 						this.video = ''
+						this.uploadProgress = 0
 						this.selectItem = {
 							value: '',
 							label: '选择分类'
 						}
 					}
+				}).catch(err => {
+					this.loading = false
 				})
 			},
 			_verify() {
@@ -166,6 +174,7 @@
 					formData: {},
 					success: (uploadFileRes) => {
 						const { code, msg, data } = JSON.parse(uploadFileRes.data)
+						console.log('视频上传成功', code, msg, data)
 						if (code === 200) {
 							this.video = data
 							this._submit()
@@ -175,6 +184,9 @@
 								icon: 'none'
 							})
 						}
+					},
+					fail: (err) => {
+						console.log('视频上传失败', err)
 					}
 				})
 				uploadTask.onProgressUpdate((res) => {
@@ -183,6 +195,11 @@
 					// console.log('已经上传的数据长度', res.totalBytesSent)
 					// console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
 				})
+			}
+		},
+		onHide() {
+			if (this.videoContext) {
+				this.videoContext.pause()
 			}
 		}
 	}

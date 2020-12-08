@@ -86,7 +86,6 @@ export const post = (url, data) => {
 
 // 请求之前
 http.interceptors.request.use((config) => {
-	// 可使用async await 做异步操作
 	try {
 		const _token = uni.getStorageSync('TOKEN')
 		if (_token) {
@@ -98,32 +97,13 @@ http.interceptors.request.use((config) => {
 	} catch (e) {
 		// error
 	}
-
-	// 演示custom 用处
-	// if (config.custom.auth) {
-	//   config.header.token = 'token'
-	// }
-	// if (config.custom.loading) {
-	//  uni.showLoading()
-	// }
-	/**
-	 /* 演示
-	 if (!token) { // 如果token不存在，return Promise.reject(config) 会取消本次请求
-	    return Promise.reject(config)
-	  }
-	 **/
 	return config
-}, config => { // 可使用async await 做异步操作
+}, config => {
 	return Promise.reject(config)
 })
 
 // 请求之后
-http.interceptors.response.use((response) => { /* 对响应成功做点什么 可使用async await 做异步操作*/
-	//  if (response.data.code !== 200) { // 服务端返回的状态码不等于200，则reject()
-	//    return Promise.reject(response) // return Promise.reject 可使promise状态进入catch
-	// if (response.config.custom.verification) { // 演示自定义参数的作用
-	//   return response.data
-	// }
+http.interceptors.response.use((response) => {
 	const {
 		code
 	} = response.data
