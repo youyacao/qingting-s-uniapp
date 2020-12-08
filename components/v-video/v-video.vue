@@ -146,7 +146,9 @@
 					if (val) {
 						this.videoContext.pause()
 					} else {
-						this.videoContext.play()
+						if (!this.isPause) {
+							this.videoContext.play()
+						}
 					}
 				}
 			}
