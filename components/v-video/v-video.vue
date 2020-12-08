@@ -16,7 +16,13 @@
 			<view class="play-icon__box" v-if="isPause" @tap="onTap">
 				<image class="play-icon" src="/static/images/play-icon.png" mode=""></image>
 			</view>
-		<v-progress class="progress" :detail="detail"></v-progress>
+		<!-- <v-progress class="progress" :detail="detail"></v-progress> -->
+		<v-slider
+			class="progress"
+			v-model="sliderValue"
+			:is-start="isPause"
+			@change="_sliderChange" 
+			@changing="_sliderChanging"  />
 	</view>
 </template>
 
@@ -35,7 +41,8 @@
 				detail: {
 					currentTime: 0,
 					duration: 0
-				}
+				},
+				sliderValue: 0
 			};
 		},
 		computed: {
@@ -65,8 +72,33 @@
 			})
 		},
 		methods: {
+			pause(){
+				if(this.videoContext) {
+					this.videoContext.pause()
+				}
+			},
+			stop(){
+				if(this.videoContext) {
+					this.videoContext.seek(0)
+					this.sliderValue = 0
+				}
+			},
+			seek(value){
+				if(this.videoContext) {
+					this.videoContext.seek(value)
+					this.videoContext.play()
+					this.isPause = false
+				}
+			},
+			_sliderChange({ value }) {
+				this.seek(value / 100 * this.detail.duration)
+			},
+			_sliderChanging() {
+				this.pause()
+			},
 			timeUpdate({ detail }) {
 				this.detail = detail
+				this.sliderValue = this.detail.currentTime / this.detail.duration * 100
 				if (this.path !== '/pages/home/home') {
 					this.videoContext.pause()
 				}

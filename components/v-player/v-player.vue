@@ -5,7 +5,7 @@
 				<v-video 
 					v-if="index > (playIndex - 3) && (playIndex + 3) > index"
 					:src="item.video_url" :video="item" :index="index" :current="playIndex" :ref="`video_${index}`"
-					@play="onPlay"></v-video>
+					@play="onPlay" :style="{'height': `${windowHeight}px`, 'width': `${windowWidth}px`}"></v-video>
 				<view class="bottom">
 					<view class="bottom-author">
 						<text class="bottom-author__text">@{{ item.nickname || item.username }}</text>
@@ -102,7 +102,7 @@
 	export default {
 		data() {
 			return {
-				scrollable: true,
+				scrollable: false,
 				init: false,
 				playIndex: 0,
 				videoList: [],
@@ -510,9 +510,9 @@
 	.bottom {
 		position: absolute;
 		right: 150rpx;
-		bottom: 50px;
+		bottom: 60px;
 		left: 0;
-		padding: 24rpx;
+		padding: 12rpx 24rpx;
 	}
 	.cell {
 		position: relative;

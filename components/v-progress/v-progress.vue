@@ -25,7 +25,7 @@
 		computed: {
 			...mapGetters(['screenWidth']),
 			processBarWidth() {
-				return (this.detail.currentTime / this.detail.duration) * this.screenWidth
+				return this.detail.currentTime / this.detail.duration * this.screenWidth
 			}
 		}
 	}
