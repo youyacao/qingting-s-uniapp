@@ -134,3 +134,8 @@ export const CommentPraise = (data) => {
 export const CancelCommentPraise = (data) => {
 	return post('comment/offLike', data)
 }
+
+// 上传图片
+export const UploadImage = () => {
+	return post('upload')
+}

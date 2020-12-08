@@ -1,6 +1,6 @@
 <template>
 	<view class="body">
-		<image class="poster" :src="video.thumb" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}" v-if="!isPlay"></image>
+		<image class="poster" :src="video.thumb" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}" v-if="!isPlay && !isPause"></image>
 		<video id="video" src="" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}"
 			:controls="controls"
 			:show-center-play-btn="false"
@@ -40,7 +40,7 @@
 		},
 		computed: {
 			...mapGetters(['windowHeight', 'windowWidth']),
-			...mapState(['isLeave'])
+			...mapState(['appHide', 'path'])
 		},
 		props: {
 			video: {
@@ -59,18 +59,17 @@
 		mounted() {
 			this.$nextTick(() => {
 				this.videoContext = uni.createVideoContext('video', this)
-				const _pages = getCurrentPages()
-				const _page = _pages[_pages.length - 1]
-				const _route = _page.route
-				if (this.index === this.current && _route === 'pages/home/home') {
+				if (this.index === this.current && this.path === '/pages/home/home') {
 					this.play()
 				}
 			})
 		},
 		methods: {
 			timeUpdate({ detail }) {
-				// console.log(detail)
 				this.detail = detail
+				if (this.path !== '/pages/home/home') {
+					this.videoContext.pause()
+				}
 			},
 			loadedmetadata(event) {
 				console.log(event)
@@ -105,14 +104,16 @@
 				this.isPlay = false
 			}
 		},
+		onHide() {
+			console.log('video Hide')
+			this.videoContext.pause()
+		},
 		watch: {
-			isLeave(val) {
-				if (val) {
-					if (this.index === this.current) {
+			appHide(val) {
+				if (this.index === this.current) {
+					if (val) {
 						this.videoContext.pause()
-					}
-				} else {
-					if (this.index === this.current && !this.isPause) {
+					} else {
 						this.videoContext.play()
 					}
 				}

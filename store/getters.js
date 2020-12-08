@@ -1,6 +1,5 @@
 export default {
 	windowHeight: (state) => {
-		console.log(state.systemInfo)
 		return state.systemInfo.windowHeight || 0
 	},
 	windowWidth: (state) => {

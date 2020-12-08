@@ -40,13 +40,13 @@
 			})
 		},
 		onShow() {
-			this.setLeave(false)
+			this.setAppHide(false)
 		},
 		methods: {
-			...mapMutations(['setLeave'])
+			...mapMutations(['setAppHide'])
 		},
 		onHide() {
-			this.setLeave(true)
+			this.setAppHide(true)
 		}
 	}
 </script>

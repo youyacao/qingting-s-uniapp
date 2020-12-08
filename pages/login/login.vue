@@ -67,6 +67,10 @@
 					username: this.username,
 					password: this.password
 				}).then(({ code, msg, data }) => {
+					uni.showToast({
+						title: msg,
+						icon: 'none'
+					})
 					this.loading = false
 					if (code === 200) {
 						const { token } = data

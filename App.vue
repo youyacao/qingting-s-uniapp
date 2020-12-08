@@ -11,11 +11,11 @@
 		},
 		onShow: function() {
 			console.log('App Show')
-			// this.$store.commit('setLeave', false)
+			// this.$store.commit('setAppHide', false)
 		},
 		onHide: function() {
 			console.log('App Hide')
-			this.$store.commit('setLeave', true)
+			// this.$store.commit('setAppHide', true)
 		}
 	}
 </script>

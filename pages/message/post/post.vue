@@ -16,7 +16,7 @@
 </template>
 
 <script>
-	import { Categories, PostArticle } from '@/common/api.js'
+	import { Categories, PostArticle, UploadImage } from '@/common/api.js'
 	import { BASE_URL } from '@/common/config.js'
 	import { getToken } from '@/common/common.js'
 	
@@ -36,6 +36,37 @@
 		},
 		onLoad() {
 			this._getCategories()
+			// UploadImage().then(({ code, msg }) => {
+			// 	console.log(code, msg)
+			// })
+			
+			// uni.chooseImage({
+			//     success: (chooseImageRes) => {
+			//         const tempFilePaths = chooseImageRes.tempFilePaths
+			// 		let _time = 0
+			// 		const _timer = setInterval(() => {
+			// 			_time++
+			// 		}, 100)
+			//         uni.uploadFile({
+			//         	url: `${BASE_URL}upload`,
+			//         	filePath: tempFilePaths[0],
+			//         	header: {
+			//         		authorization: getToken()
+			//         	},
+			//         	name: 'file',
+			//         	success: (uploadFileRes) => {
+			//         		console.log(uploadFileRes)
+			//         	},
+			//         	fail: (error) => {
+			//         		console.log(error)
+			//         	},
+			//         	complete: () => {
+			// 				clearInterval(_timer)
+			//         		console.log('complete', _time)
+			//         	}
+			//         })
+			//     }
+			// })
 		},
 		methods: {
 			_submit() {
@@ -80,6 +111,7 @@
 				let _length = 0
 				let _count = 0
 				let _errIndex = []
+				console.log(lists)
 				lists.map((item, index) => {
 					uni.uploadFile({
 						url: `${BASE_URL}upload`,
@@ -90,6 +122,7 @@
 						name: 'file',
 						success: (uploadFileRes) => {
 							const { code, data } = JSON.parse(uploadFileRes.data)
+							console.log('上传成功', code, data)
 							if (code === 200) {
 								_length++
 								if (data.url) {
@@ -104,7 +137,7 @@
 						},
 						complete: () => {
 							_count++
-							if (_count === lists.length - 1) {
+							if (_count === lists.length) {
 								if (_length === lists.length) {
 									uni.hideLoading()
 									this.$refs.uToast.show({

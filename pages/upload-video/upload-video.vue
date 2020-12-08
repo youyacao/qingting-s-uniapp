@@ -3,8 +3,13 @@
 		<view class="head">
 			<textarea class="textarea" placeholder="请输入标题~" v-model="title" />
 			<view class="head-right" @tap="_chooseVideo">
-				<video class="video" :src="src" v-if="src" :controls="false" autoplay></video>
-				<image class="add-icon" src="/static/images/add-icon-1.png" mode="" v-else></image>
+				<view class="video-box">
+					<video class="video" :src="src" v-if="src" :controls="false" autoplay></video>
+					<image class="add-icon" src="/static/images/add-icon-1.png" mode="" v-else></image>
+				</view>
+				<view class="progress-box">
+					<text class="progress-text">{{ uploadProgress }}%</text>
+				</view>
 			</view>
 		</view>
 		<view class="line"></view>
@@ -16,7 +21,7 @@
 			<image class="select-icon" src="/static/images/right-arrow.png" mode=""></image>
 		</view>
 		<view class="btn-box">
-			<u-button type="success" @click="_uploadVideo" :loading="loading">发布</u-button>
+			<u-button type="success" @click="_verify" :loading="loading">发布</u-button>
 		</view>
 		<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="_confirm"></u-select>
 		<u-toast ref="uToast" />
@@ -31,6 +36,7 @@
 	import { BASE_URL } from '@/common/config.js'
 	import { getToken } from '@/common/common.js'
 	import VTabbar from '@/components/v-tabbar/v-tabbar.nvue'
+	import { mapActions } from 'vuex'
 	
 	export default {
 		data() {
@@ -44,7 +50,8 @@
 					label: '选择分类'
 				},
 				title: '',
-				loading: false
+				loading: false,
+				uploadProgress: 0
 			};
 		},
 		components: { VTabbar },
@@ -52,13 +59,18 @@
 			uni.hideTabBar()
 			this._getCategories()
 		},
+		onShow() {
+			this.updateUserinfo()
+		},
 		methods: {
+			...mapActions(['updateUserinfo']),
 			_chooseVideo() {
 				uni.chooseVideo({
 					count: 1,
 					sourceType: ['camera', 'album'],
 					success: (res) => {
 						this.src = res.tempFilePath
+						this._uploadVideo()
 					}
 				})
 			},
@@ -98,7 +110,6 @@
 					thumb: this.video.img_url,
 					video_url: this.video.url
 				}).then(({ code, msg }) => {
-					console.log(code, msg)
 					uni.showToast({
 						title: msg,
 						icon: 'none'
@@ -115,7 +126,7 @@
 					}
 				})
 			},
-			_uploadVideo() {
+			_verify() {
 				if (!this.title) {
 					return this.$refs.uToast.show({
 						title: '请输入标题',
@@ -134,8 +145,18 @@
 						type: 'warning'
 					})
 				}
-				this.loading = true
-				uni.uploadFile({
+				if (this.uploadProgress === 100) {
+					this.loading = true
+					this._submit()
+				} else {
+					uni.showToast({
+						title: '请等待文件上传完成',
+						icon: 'none'
+					})
+				}
+			},
+			_uploadVideo() {
+				const uploadTask = uni.uploadFile({
 					url: `${BASE_URL}uploadVideo`,
 					header: {
 						authorization: getToken()
@@ -156,12 +177,27 @@
 						}
 					}
 				})
+				uploadTask.onProgressUpdate((res) => {
+					this.uploadProgress = res.progress
+					console.log('上传进度', res.progress)
+					// console.log('已经上传的数据长度', res.totalBytesSent)
+					// console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
+				})
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.progress-box {
+		width: 150rpx;
+		text-align: center;
+	}
+	.progress-text {
+		font-size: 24rpx;
+		color: #808080;
+		margin-top: 12rpx;
+	}
 	.nav-box {
 		position: fixed;
 		bottom: 0;
@@ -215,8 +251,7 @@
 		flex: 1;
 		color: #FFFFFF;
 	}
-	.head-right {
-		width: 150rpx;
+	.video-box {
 		height: 200rpx;
 		border-radius: 12rpx;
 		background-color: #808080;
@@ -224,6 +259,9 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+	}
+	.head-right {
+		width: 150rpx;
 	}
 	.head {
 		display: flex;

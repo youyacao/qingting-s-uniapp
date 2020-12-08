@@ -142,8 +142,7 @@ http.interceptors.response.use((response) => { /* 对响应成功做点什么 �
 			}
 		}
 	}
-	console.log(response.config.url)
-	console.log(response.data)
+	console.log('响应：', response.config.url, response.data)
 	return response.data
 }, (response) => {
 	console.log(response)

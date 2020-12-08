@@ -3,7 +3,7 @@
 		<list class="list" :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" :bounce="false" @scroll="onScroll">
 			<cell class="cell" v-for="(item, index) in videoList" :key="`cell_${index}`" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}">
 				<v-video 
-					v-if="index > (playIndex - 2) && (playIndex + 2) > index"
+					v-if="index > (playIndex - 3) && (playIndex + 3) > index"
 					:src="item.video_url" :video="item" :index="index" :current="playIndex" :ref="`video_${index}`"
 					@play="onPlay"></v-video>
 				<view class="bottom">

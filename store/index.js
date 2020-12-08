@@ -9,7 +9,7 @@ const store = new Vuex.Store({
 	getters,
 	state: {
 		systemInfo: null,
-		isLeave: false,
+		appHide: false,
 		userinfo: {
 			avatar: '',
 			username: '',
@@ -24,8 +24,8 @@ const store = new Vuex.Store({
 		setSystemInfo(state, data) {
 			state.systemInfo = data
 		},
-		setLeave(state, data) {
-			state.isLeave = data
+		setAppHide(state, data) {
+			state.appHide = data
 		},
 		setUserinfo(state, data) {
 			state.userinfo = data
