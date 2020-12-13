@@ -1,0 +1,274 @@
+<template>
+	<view class="body">
+		<view class="head">
+			<view class="head-item" @tap="current = 0">
+				<text class="head-item__text" :class="{'active': current === 0}">关注({{ total }})</text>
+			</view>
+			<view class="head-item" @tap="current = 1">
+				<text class="head-item__text" :class="{'active': current === 1}">粉丝({{ ftotal }})</text>
+			</view>
+		</view>
+		<swiper class="swiper" :current="current" @change="change">
+			<swiper-item>
+				<list @loadmore="floadmore">
+					<cell v-for="(item, index) in list" :key="`flist_${index}`">
+						<view class="item">
+							<image class="avatar" :src="item.avatar" mode=""></image>
+							<view class="right">
+								<view class="userinfo">
+									<view class="right-head">
+										<text class="nickname">{{ item.nickname }}</text>
+									</view>
+									<view class="right-foot">
+										<text class="signature">{{ item.desc || '这个人很懒，什么也没有留下' }}</text>
+									</view>
+								</view>
+								<view class="btn bg-red" v-if="item.is_follow" @tap="_follow(item)">
+									<text class="btn-text">关注</text>
+								</view>
+								<view class="btn" v-else @tap="_unfollow(item)">
+									<text class="btn-text">已关注</text>
+								</view>
+							</view>
+						</view>
+					</cell>
+					<cell v-if="!loading">
+						<text class="tip-text">正在加载...</text>
+					</cell>
+					<cell v-if="noData && list.length === 0">
+						<text class="tip-text">暂无数据</text>
+					</cell>
+					<cell v-if="noData && list.length > 10">
+						<text class="tip-text">没有更多了</text>
+					</cell>
+				</list>
+			</swiper-item>
+			<swiper-item>
+				<list @loadmore="floadmore">
+					<cell v-for="(item, index) in flist" :key="`flist_${index}`">
+						<view class="item">
+							<image class="avatar" :src="item.avatar" mode=""></image>
+							<view class="right">
+								<view class="userinfo">
+									<view class="right-head">
+										<text class="nickname">{{ item.nickname }}</text>
+									</view>
+									<view class="right-foot">
+										<text class="signature">{{ item.desc || '这个人很懒，什么也没有留下' }}</text>
+									</view>
+								</view>
+								<view class="btn" @tap="_unfollow(item)" v-if="item.is_follow">
+									<text class="btn-text">互相关注</text>
+								</view>
+								<view class="btn bg-red" @tap="_follow(item)" v-else>
+									<text class="btn-text">回关</text>
+								</view>
+							</view>
+						</view>
+					</cell>
+					<cell v-if="!floading">
+						<text class="tip-text">正在加载...</text>
+					</cell>
+					<cell v-if="fnoData && flist.length === 0">
+						<text class="tip-text">暂无数据</text>
+					</cell>
+					<cell v-if="fnoData && flist.length > 10">
+						<text class="tip-text">没有更多了</text>
+					</cell>
+				</list>
+			</swiper-item>
+		</swiper>
+	</view>
+</template>
+
+<script>
+	import { Fans, FollowList, Follow, Unfollow } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {
+				current: 0,
+				floading: false,
+				fnoData: false,
+				fpage: 1,
+				flist: [],
+				ftotal: 0,
+				total: 0,
+				page: 1,
+				list: [],
+				loading: false,
+				noData: false
+			};
+		},
+		onLoad(options) {
+			uni.setNavigationBarTitle({
+				title: options.nickname
+			})
+			this.current = Number(options.current)
+		},
+		onShow() {
+			this._getFansList()
+			this._getFollowList()
+		},
+		methods: {
+			change({ detail }) {
+				this.current = detail.current
+			},
+			_getFansList() {
+				Fans({
+					page: this.fpage,
+					limit: 10
+				}).then(({ code, data }) => {
+					this.floading = true
+					if (code === 200) {
+						const { total, total_page, current_page, list } = data
+						this.ftotal = total
+						if (current_page === 1) {
+							this.flist = list
+						} else {
+							this.flist = this.flist.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.fnoData = true
+						}
+					}
+				})
+			},
+			floadmore() {
+				this.fpage++
+				this._getFansList()
+			},
+			_getFollowList() {
+				FollowList({
+					page: this.page,
+					limit: 10
+				}).then(({ code, data }) => {
+					this.loading = true
+					if (code === 200) {
+						const { total, total_page, current_page, list } = data
+						this.total = total
+						if (current_page === 1) {
+							this.list = list
+						} else {
+							this.list = this.list.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.noData = true
+						}
+					}
+				})
+			},
+			loadmore() {
+				this.page++
+				this._getFollowList()
+			},
+			_follow(item) {
+				Follow({
+					follow_id: item.id
+				}).then(({ code, msg }) => {
+					uni.showToast({
+						title: msg,
+						icon: 'none'
+					})
+					if (code === 200) {
+						item.is_follow = true
+					}
+				})
+			},
+			_unfollow(item) {
+				Unfollow({
+					follow_id: item.id
+				}).then(({ code, msg }) => {
+					uni.showToast({
+						title: msg,
+						icon: 'none'
+					})
+					if (code === 200) {
+						item.is_follow = false
+					}
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.bg-red {
+		background-color: #fa3534;
+	}
+	.tip-text {
+		text-align: center;
+		color: #808080;
+		padding: 32rpx 0;
+		font-size: 24rpx;
+	}
+	.btn-text {
+		font-size: 28rpx;
+		color: #FFFFFF;
+	}
+	.btn {
+		background-color: #82848a;
+		height: 60rpx;
+		border-radius: 6rpx;
+		align-items: center;
+		justify-content: center;
+		width: 160rpx;
+		margin-left: 24rpx;
+	}
+	.signature {
+		font-size: 28rpx;
+		color: #808080;
+		lines: 1;
+		text-overflow: ellipsis;
+	}
+	.nickname {
+		font-size: 32rpx;
+		color: #FFFFFF;
+		margin-bottom: 12rpx;
+	}
+	.userinfo {
+		flex: 1;
+	}
+	.right {
+		flex-direction: row;
+		align-items: center;
+		flex: 1;
+	}
+	.item {
+		margin: 32rpx 32rpx 0;
+		flex-direction: row;
+		align-items: center;
+	}
+	.avatar {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		margin-right: 24rpx;
+	}
+	.swiper {
+		flex: 1;
+	}
+	.active {
+		border-bottom-color: #19be6b;
+	}
+	.head-item__text {
+		font-size: 32rpx;
+		color: #FFFFFF;
+		height: 80rpx;
+		line-height: 80rpx;
+		text-align: center;
+		border-bottom-width: 2rpx;
+		border-bottom-color: #252a34;
+	}
+	.head-item {
+		flex: 1;
+	}
+	.head {
+		height: 80rpx;
+		padding: 0 32rpx;
+		flex-direction: row;
+	}
+	.body {
+		flex: 1;
+	}
+</style>

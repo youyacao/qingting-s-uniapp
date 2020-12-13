@@ -216,6 +216,24 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/fans/fans",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/promotion-record/promotion-record",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "推广记录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

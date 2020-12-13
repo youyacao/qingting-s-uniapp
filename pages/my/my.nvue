@@ -16,11 +16,11 @@
 		</view>
 		<view class="head">
 			<view class="head-box">
-				<view class="head-item">
+				<view class="head-item" @tap="_toFans('/pages/my/fans/fans?current=1')">
 					<text class="head-item__value">0</text>
 					<text class="head-item__label">粉丝</text>
 				</view>
-				<view class="head-item">
+				<view class="head-item" @tap="_toFans('/pages/my/fans/fans?current=0')">
 					<text class="head-item__value">0</text>
 					<text class="head-item__label">关注</text>
 				</view>
@@ -28,7 +28,7 @@
 					<text class="head-item__value">0</text>
 					<text class="head-item__label">获赞</text>
 				</view>
-				<view class="head-item">
+				<view class="head-item" @tap="_toPromotion">
 					<text class="head-item__value">0</text>
 					<text class="head-item__label">推广</text>
 				</view>
@@ -91,6 +91,14 @@
 		},
 		methods: {
 			...mapActions(['updateUserinfo']),
+			_toFans(url) {
+				uni.navigateTo({ url: `${url}&nickname=${this.userinfo.nickname}` })
+			},
+			_toPromotion() {
+				uni.navigateTo({
+					url: '/pages/my/promotion-record/promotion-record'
+				})
+			},
 			_createLive() {
 				if (this.userinfo.can_live === 0) {
 					modal.alert({

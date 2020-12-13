@@ -122,7 +122,8 @@ http.interceptors.response.use((response) => {
 			}
 		}
 	}
-	console.log('响应：', response.config.url, response.data)
+	console.log(response.config.url)
+	console.log(response.data)
 	return response.data
 }, (response) => {
 	console.log(response)

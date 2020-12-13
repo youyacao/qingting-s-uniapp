@@ -7,7 +7,7 @@
 				<view class="username-box">
 					<text class="username">{{ details ? (details.nickname || details.username) : '蜻蜓直播' }}</text>
 				</view>
-				<view class="focus" v-if="details && details.is_follow === 0" @tap="_focus">
+				<view class="focus" v-if="details && details.is_follow === 0" @tap="_follow">
 					<image class="focus-icon" src="/static/images/add-c.png" mode=""></image>
 				</view>
 			</view>
@@ -41,7 +41,7 @@
 
 <script>
 	import { mapGetters } from 'vuex'
-	import { LiveDetails, FocusOn } from '@/common/api.js'
+	import { LiveDetails, Follow } from '@/common/api.js'
 	
 	export default {
 		data() {
@@ -73,8 +73,8 @@
 			_back() {
 				uni.navigateBack()
 			},
-			_focus() {
-				FocusOn({
+			_follow() {
+				Follow({
 					follow_id: this.details.id
 				}).then(({ code, msg }) => {
 					uni.showToast({

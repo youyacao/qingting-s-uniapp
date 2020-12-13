@@ -1,0 +1,102 @@
+<template>
+	<view class="body">
+		<list @loadmore="loadmore">
+			<cell v-for="(item, index) in list" :key="index">
+				<view class="item">
+					<image class="avatar" :src="item.avatar" mode=""></image>
+					<view class="right">
+						<view class="right-head">
+							<text class="nickname">{{ item.nickname }}</text>
+						</view>
+						<view class="right-foot">
+							<text class="id">ID: {{ item.id }}</text>
+						</view>
+					</view>
+				</view>
+			</cell>
+			<cell v-if="!loading">
+				<text class="tip-text">正在加载...</text>
+			</cell>
+			<cell v-if="noData && list.length === 0">
+				<text class="tip-text">暂无数据</text>
+			</cell>
+			<cell v-if="noData && list.length > 10">
+				<text class="tip-text">没有更多了</text>
+			</cell>
+		</list>
+	</view>
+</template>
+
+<script>
+	import { PromotionRecord } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {
+				list: [],
+				page: 1,
+				loading: false,
+				noData: false
+			};
+		},
+		onShow() {
+			this._getList()
+		},
+		methods: {
+			_getList() {
+				PromotionRecord({
+					page: this.page,
+					limit: 10
+				}).then(({ code, data }) => {
+					this.loading = true
+					if (code === 200) {
+						const { total_page, current_page, list } = data
+						if (current_page === 1) {
+							this.list = list
+						} else {
+							this.list = this.list.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.noData = true
+						}
+					}
+				})
+			},
+			loadmore() {
+				this.page++
+				this._getList()
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.id {
+		font-size: 28rpx;
+		color: #808080;
+	}
+	.nickname {
+		font-size: 32rpx;
+		color: #FFFFFF;
+		margin-bottom: 12rpx;
+	}
+	.avatar {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		margin-right: 24rpx;
+	}
+	.item {
+		flex-direction: row;
+		margin: 32rpx 32rpx 0;
+	}
+	.tip-text {
+		text-align: center;
+		font-size: 24rpx;
+		color: #808080;
+		padding: 32rpx 0;
+	}
+	.body {
+		flex: 1;
+	}
+</style>

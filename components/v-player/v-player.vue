@@ -20,7 +20,7 @@
 							<image class="avatar" :src="item.avatar" mode="aspectFit"></image>
 						</view>
 						<view class="add-container" v-if="item.is_follow === 0">
-							<view class="add-box" @tap="_focusOn(item)">
+							<view class="add-box" @tap="_follow(item)">
 								<image class="add-icon" src="/static/images/add-c.png" mode=""></image>
 							</view>
 						</view>
@@ -96,13 +96,13 @@
 <script>
 	import { mapGetters } from 'vuex'
 	import VVideo from '@/components/v-video/v-video'
-	import { VideoList, Praise, CancelPraise, FocusOn, Comment, CommentList, CommentPraise, CancelCommentPraise } from '@/common/api.js'
+	import { VideoList, Praise, CancelPraise, Follow, Comment, CommentList, CommentPraise, CancelCommentPraise } from '@/common/api.js'
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	
 	export default {
 		data() {
 			return {
-				scrollable: false,
+				scrollable: true,
 				init: false,
 				playIndex: 0,
 				videoList: [],
@@ -116,7 +116,8 @@
 				comment: '',
 				commentList: [],
 				loading: false,
-				noData: false
+				noData: false,
+				commentPage: 1
 			};
 		},
 		components: {
@@ -229,8 +230,8 @@
 					// }
 				}
 			},
-			_focusOn(item) {
-				FocusOn({
+			_follow(item) {
+				Follow({
 					follow_id: item.user_id
 				}).then(({ code, msg }) => {
 					uni.showToast({

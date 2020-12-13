@@ -81,7 +81,7 @@ export const LiveHistory = (data) => {
 }
 
 // 关注用户
-export const FocusOn = (data) => {
+export const Follow = (data) => {
 	return post('follow/on', data)
 }
 
@@ -138,4 +138,24 @@ export const CancelCommentPraise = (data) => {
 // 上传图片
 export const UploadImage = () => {
 	return post('upload')
+}
+
+// 推广记录
+export const PromotionRecord = () => {
+	return post('refer')
+}
+
+// 粉丝
+export const Fans = (data) => {
+	return post('follow/fans', data)
+}
+
+// 关注列表
+export const FollowList = (data) => {
+	return post('follow/me', data)
+}
+
+// 取消关注
+export const Unfollow = (data) => {
+	return post('follow/off', data)
 }
