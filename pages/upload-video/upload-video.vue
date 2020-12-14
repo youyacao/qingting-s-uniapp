@@ -124,7 +124,9 @@
 						this.title = ''
 						this.src = ''
 						this.video = ''
-						this.uploadProgress = 0
+						setTimeout(() => {
+							this.uploadProgress = 0
+						}, 200)
 						this.selectItem = {
 							value: '',
 							label: '选择分类'
@@ -177,7 +179,6 @@
 						console.log('视频上传成功', code, msg, data)
 						if (code === 200) {
 							this.video = data
-							this._submit()
 						} else {
 							uni.showToast({
 								title: msg,
