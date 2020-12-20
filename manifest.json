@@ -2,8 +2,8 @@
     "name" : "蜻蜓S系统",
     "appid" : "__UNI__64B56AC",
     "description" : "",
-    "versionName" : "1.4.1",
-    "versionCode" : 700,
+    "versionName" : "1.4.2",
+    "versionCode" : 1420,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -55,7 +55,8 @@
             "ios" : {},
             /* SDK配置 */
             "sdkConfigs" : {
-                "oauth" : {}
+                "oauth" : {},
+                "ad" : {}
             },
             "icons" : {
                 "android" : {
