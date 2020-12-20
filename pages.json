@@ -8,7 +8,7 @@
 		// 	"style": {}
 		// },
 		{
-			"path": "pages/home/home",
+			"path": "pages/ad/ad",
 			"style": {}
 		},
 		{
@@ -231,6 +231,19 @@
             {
                 "navigationBarTitleText": "推广记录",
                 "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/ad/ad",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"app-plus": {
+					"bounce": "none"
+				}
             }
             
         }

@@ -159,3 +159,8 @@ export const FollowList = (data) => {
 export const Unfollow = (data) => {
 	return post('follow/off', data)
 }
+
+// 广告
+export const AD = (data) => {
+	return post('advert/list', data)
+}
