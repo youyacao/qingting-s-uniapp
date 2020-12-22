@@ -164,3 +164,13 @@ export const Unfollow = (data) => {
 export const AD = (data) => {
 	return post('advert/list', data)
 }
+
+// 我发布的视频列表
+export const MyVideoList = (data) => {
+	return post('video/me', data)
+}
+
+// 删除视频
+export const RemoveVideo = (data) => {
+	return post('video/del', data)
+}

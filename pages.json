@@ -247,6 +247,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/video-list/video-list",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的视频",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

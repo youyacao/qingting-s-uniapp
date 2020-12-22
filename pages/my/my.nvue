@@ -51,6 +51,15 @@
 					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 				</view>
 			</navigator>
+			<navigator url="/pages/my/video-list/video-list" hover-class="none">
+				<view class="menu-item">
+					<view class="menu-item__left">
+						<image class="menu-icon" src="/static/images/my-video.png" mode="aspectFit"></image>
+						<text class="menu-text">我的视频</text>
+					</view>
+					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+				</view>
+			</navigator>
 			<navigator url="/pages/my/setting/setting" hover-class="none">
 				<view class="menu-item">
 					<view class="menu-item__left">

@@ -1,0 +1,147 @@
+<template>
+	<view class="body">
+		<list class="list" @loadmore="_loadmore">
+			<cell v-for="(item, index) in list" :key="index">
+				<view class="item">
+					<view class="cover-box">
+						<image class="cover" :src="item.thumb" mode="aspectFill"></image>
+						<image class="remove-icon" src="/static/images/remove.png" mode="" @tap="_remove(item, index)"></image>
+						<view class="cover-foot">
+							<text class="title">{{ item.title }}</text>
+							<text class="views">{{ item.view_num }}</text>
+						</view>
+					</view>
+				</view>
+			</cell>
+			<cell v-if="init">
+				<text class="alert">正在加载...</text>
+			</cell>
+			<cell v-if="!init && list.length === 0">
+				<text class="alert">暂无数据</text>
+			</cell>
+			<cell v-if="loading">
+				<text class="alert">加载更多中...</text>
+			</cell>
+			<cell v-if="noData && list.length > 10">
+				<text class="alert">没有更多了</text>
+			</cell>
+		</list>
+	</view>
+</template>
+
+<script>
+	const modal = weex.requireModule('modal')
+	import { MyVideoList, RemoveVideo } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {
+				list: [],
+				page: 1,
+				loading: false,
+				noData: false,
+				init: true
+			};
+		},
+		onShow() {
+			this._getMyVideoList()
+		},
+		methods: {
+			_loadmore() {
+				if (this.noData) return
+				this.loading = true
+				this.page++
+				this._getMyVideoList()
+			},
+			_getMyVideoList() {
+				MyVideoList({
+					page: this.page,
+					limit: 10
+				}).then(({ code, data }) => {
+					if (code === 200) {
+						const { list, total_page, current_page } = data
+						if (current_page === 1) {
+							this.list = list
+						} else {
+							this.list = this.list.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.noData = true
+						}
+						this.loading = false
+						this.init = false
+					}
+				})
+			},
+			_remove(item, index) {
+				modal.confirm({
+				    message: '是否确认删除该条视频?',
+					okTitle: '确认',
+					cancelTitle: '取消'
+				}, (value) => {
+					if (value === '确认') {
+						RemoveVideo({
+							id: item.id
+						}).then(({ code, msg }) => {
+							uni.showToast({
+								title: msg,
+								icon: 'none'
+							})
+							if (code === 200) {
+								this.list.splice(index, 1)
+							}
+						})
+					}
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.remove-icon {
+		width: 40rpx;
+		height: 40rpx;
+		position: absolute;
+		top: 24rpx;
+		right: 24rpx;
+	}
+	.views {
+		font-size: 32rpx;
+		color: #FFFFFF;
+	}
+	.title {
+		flex: 1;
+		padding-right: 32rpx;
+		lines: 1;
+		text-overflow: ellipsis;
+		color: #FFFFFF;
+		font-size: 32rpx;
+	}
+	.cover-foot {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 80rpx;
+		flex-direction: row;
+		align-items: center;
+		padding: 0 24rpx;
+		background-image: linear-gradient(to top, #000, transparent);
+	}
+	.cover {
+		width: 750rpx;
+	}
+	.alert {
+		font-size: 24rpx;
+		color: #999999;
+		text-align: center;
+		padding: 32rpx 0;
+	}
+	.body {
+		flex: 1;
+	}
+	.list {
+		flex: 1;
+	}
+</style>
