@@ -1,7 +1,43 @@
 <template>
 	<view class="body">
-		<list class="list">
-			<cell></cell>
+		<list class="list" @loadmore="_loadmore">
+			<cell v-for="(item, index) in list" :key="index">
+				<view class="item">
+					<view class="item-head">
+						<image class="item-head__avatar" :src="item.avatar" mode=""></image>
+						<view>
+							<text class="item-head__username">{{ item.nickname || item.username }}</text>
+							<text class="item-head__time">{{ item.created_at }}</text>
+						</view>
+					</view>
+					<view class="item-content">
+						<text class="item-content__text">{{ item.content }}</text>
+					</view>
+					<view class="item-images" :class="{'mb-12': i !== _getImages(item.images).length - 1}" v-for="(images, i) in _getImages(item.images)"
+					 :key="`images_${i}`">
+						<view class="item-image__box" :class="{'px-12': _i === 1}" v-for="(src, _i) in images" :key="`image_${_i}`">
+							<image class="item-image" :src="src" mode="aspectFill" @tap="_viewImages(item.images)"></image>
+						</view>
+					</view>
+					<view class="item-foot">
+						<view class="item-foot__col">
+							<image class="item-foot__icon" src="/static/images/dianzan-white.png" mode="aspectFit"></image>
+							<text class="item-foot__text">{{ item.like_num }}</text>
+						</view>
+						<view class="item-foot__col">
+							<image class="item-foot__icon" src="/static/images/comment-icon.png" mode="aspectFit"></image>
+							<text class="item-foot__text">{{ item.comment_num }}</text>
+						</view>
+						<view class="item-foot__col">
+							<image class="item-foot__icon" src="/static/images/share-icon.png" mode="aspectFit"></image>
+							<text class="item-foot__text">{{ item.share_num }}</text>
+						</view>
+						<view class="item-foot__col">
+							<text class="item-foot__text text-right flex-1 color-red" @tap="_remove(item, index)">删除</text>
+						</view>
+					</view>
+				</view>
+			</cell>
 			<cell v-if="init">
 				<text class="alert">正在加载...</text>
 			</cell>
@@ -19,7 +55,9 @@
 </template>
 
 <script>
-	import { RrticleList } from '@/common/api.js'
+	const modal = weex.requireModule('modal')
+	import { toTwoArray } from '@/common/common.js'
+	import { RrticleList, RemoveArticle } from '@/common/api.js'
 	
 	export default {
 		data() {
@@ -54,12 +92,144 @@
 						this.loading = false
 					}
 				})
+			},
+			_getImages(images) {
+				let _arr = []
+				for (let key in images) {
+					_arr.push(images[key])
+				}
+				return toTwoArray(_arr, 3)
+			},
+			_viewImages(images) {
+				uni.previewImage({
+					urls: images,
+					longPressActions: {
+						itemList: ['发送给朋友', '保存图片', '收藏'],
+						success: (data) => {
+							console.log('选中了第' + (data.tapIndex + 1) + '个按钮,第' + (data.index + 1) + '张图片')
+						},
+						fail: (err) => {
+							console.log(err.errMsg);
+						}
+					}
+				})
+			},
+			_loadmore() {
+				if (this.noData) return
+				this.page++
+				this.loading = true
+				this._getArticleList()
+			},
+			_remove(item, index) {
+				modal.confirm({
+				    message: '是否确认删除该条朋友圈?',
+					okTitle: '确认',
+					cancelTitle: '取消'
+				}, (value) => {
+					if (value === '确认') {
+						RemoveArticle({
+							id: item.id
+						}).then(({ code, msg }) => {
+							uni.showToast({
+								title: msg,
+								icon: 'none'
+							})
+							if (code === 200) {
+								this.list.splice(index, 1)
+							}
+						})
+					}
+				})
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.color-red {
+		color: #fa3534;
+	}
+	.flex-1 {
+		flex: 1;
+	}
+	.text-right {
+		text-align: right;
+	}
+	.mb-12 {
+		margin-bottom: 12rpx;
+	}
+	
+	.px-12 {
+		padding: 0 12rpx;
+	}
+	.item-images {
+		flex-direction: row;
+	}
+	
+	.item-image {
+		width: 220rpx;
+		height: 220rpx;
+	}
+	
+	.item-foot__text {
+		font-size: 28rpx;
+		color: #808080;
+	}
+	
+	.item-foot {
+		flex-direction: row;
+		padding: 24rpx 0;
+	}
+	
+	.item-foot__col {
+		flex-direction: row;
+		align-items: center;
+		flex: 1;
+	}
+	
+	.item-foot__icon {
+		width: 40rpx;
+		height: 40rpx;
+		margin-right: 12rpx;
+		opacity: 0.45;
+	}
+	
+	.item-content {
+		margin: 24rpx 0;
+	}
+	
+	.item-content__text {
+		font-size: 32rpx;
+		color: #FFFFFF;
+	}
+	
+	.item {
+		margin: 32rpx;
+		border-bottom-color: rgba($color: #909399, $alpha: 0.2);
+		border-bottom-width: 1rpx;
+	}
+	
+	.item-head {
+		flex-direction: row;
+	}
+	
+	.item-head__time {
+		color: #808080;
+		font-size: 24rpx;
+	}
+	
+	.item-head__username {
+		color: #FFFFFF;
+		font-size: 28rpx;
+		margin-bottom: 12rpx;
+	}
+	
+	.item-head__avatar {
+		width: 90rpx;
+		height: 90rpx;
+		margin-right: 24rpx;
+		border-radius: 50%;
+	}
 	.alert {
 		font-size: 24rpx;
 		color: #999999;

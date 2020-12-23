@@ -175,7 +175,12 @@ export const RemoveVideo = (data) => {
 	return post('video/del', data)
 }
 
-// 我的图文
+// 我的朋友圈
 export const RrticleList = (data) => {
 	return post('article/me', data)
+}
+
+// 删除朋友圈
+export const RemoveArticle = (data) => {
+	return post('article/del', data)
 }
