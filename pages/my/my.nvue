@@ -35,7 +35,7 @@
 			</view>
 		</view>
 		<view class="menu-box">
-			<!-- <navigator url="/pages/my/article-list/article-list" hover-class="none">
+			<navigator url="/pages/my/article-list/article-list" hover-class="none">
 				<view class="menu-item">
 					<view class="menu-item__left">
 						<image class="menu-icon" src="/static/images/friends.png" mode="aspectFit"></image>
@@ -43,7 +43,7 @@
 					</view>
 					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 				</view>
-			</navigator> -->
+			</navigator>
 			<navigator url="/pages/my/video-list/video-list" hover-class="none">
 				<view class="menu-item">
 					<view class="menu-item__left">

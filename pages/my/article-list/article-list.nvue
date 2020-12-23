@@ -41,7 +41,17 @@
 					limit: 10
 				}).then(({ code, data }) => {
 					if (code === 200) {
-						const { list } = data
+						const { total_page, current_page, list } = data
+						if (current_page === 1) {
+							this.list = list
+						} else {
+							this.list = this.list.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.noData = true
+						}
+						this.init = false
+						this.loading = false
 					}
 				})
 			}
@@ -50,6 +60,12 @@
 </script>
 
 <style lang="scss" scoped>
+	.alert {
+		font-size: 24rpx;
+		color: #999999;
+		text-align: center;
+		padding: 32rpx 0;
+	}
 	.body {
 		flex: 1;
 	}
