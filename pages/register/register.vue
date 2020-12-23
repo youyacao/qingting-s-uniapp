@@ -14,7 +14,7 @@
 						<image class="form-item__icon" src="/static/images/captch.png" mode=""></image>
 						<input class="form-item__input" type="number" placeholder="验证码" v-model="captcha" />
 					</view>
-					<view class="captch-btn" @tap="_sendCaptcha">{{ countdown === 60 ? '发送验证码' : `${countdown}s`}}</view>
+					<view class="captch-btn" @tap="_confirmSend">{{ countdown === 60 ? '发送验证码' : `${countdown}s`}}</view>
 				</view>
 				<view class="form-item">
 					<image class="form-item__icon" src="/static/images/password.png" mode=""></image>
@@ -113,19 +113,7 @@
 			},
 			_sendCaptcha() {
 				if (this.countdown !== 60) return
-				const username = this.username.replace(/\s*/g, '')
-				if (username.length === 0) {
-					return uni.showToast({
-						title: '请输入手机号或邮箱',
-						icon: 'none'
-					})
-				}
-				if (!(this.phoneReg.test(username)) && !(this.emailReg.test(username))) {
-					return uni.showToast({
-						title: '请输入正确的手机号或邮箱',
-						icon: 'none'
-					})
-				}
+				this._verify()
 				Captcha().then(({ code, data }) => {
 					if (code === 200) {
 						this.captchaData = data
@@ -140,9 +128,25 @@
 					}
 				})
 			},
+			_verify() {
+				const username = this.username.replace(/\s*/g, '')
+				if (username.length === 0) {
+					return uni.showToast({
+						title: '请输入手机号或邮箱',
+						icon: 'none'
+					})
+				}
+				if (!(this.phoneReg.test(username)) && !(this.emailReg.test(username))) {
+					return uni.showToast({
+						title: '请输入正确的手机号或邮箱',
+						icon: 'none'
+					})
+				}
+			},
 			_confirmSend() {
+				this._verify()
 				const username = this.username
-				if (this.graphicCaptcha) {
+				if (!this.graphicCaptcha) {
 					if (this.phoneReg.test(username)) {
 						this.type = 1
 						uni.showLoading({
@@ -150,7 +154,7 @@
 						})
 						SMS({
 							phone: username,
-							no_captcha: 1,
+							no_captcha: 0,
 							captcha: this.graphicCaptcha,
 							ckey: this.captchaData.key
 						}).then(({ code, msg }) => {

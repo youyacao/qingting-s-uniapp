@@ -174,3 +174,8 @@ export const MyVideoList = (data) => {
 export const RemoveVideo = (data) => {
 	return post('video/del', data)
 }
+
+// 我的图文
+export const RrticleList = (data) => {
+	return post('article/me', data)
+}

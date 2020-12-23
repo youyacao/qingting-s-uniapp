@@ -1,0 +1,56 @@
+<template>
+	<view class="body">
+		<list class="list">
+			<cell></cell>
+			<cell v-if="init">
+				<text class="alert">正在加载...</text>
+			</cell>
+			<cell v-if="!init && list.length === 0">
+				<text class="alert">暂无数据</text>
+			</cell>
+			<cell v-if="loading">
+				<text class="alert">加载更多中...</text>
+			</cell>
+			<cell v-if="noData && list.length > 10">
+				<text class="alert">没有更多了</text>
+			</cell>
+		</list>
+	</view>
+</template>
+
+<script>
+	import { RrticleList } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {
+				list: [],
+				page: 1,
+				loading: false,
+				init: true,
+				noData: false
+			};
+		},
+		onShow() {
+			this._getArticleList()
+		},
+		methods: {
+			_getArticleList() {
+				RrticleList({
+					page: this.page,
+					limit: 10
+				}).then(({ code, data }) => {
+					if (code === 200) {
+						const { list } = data
+					}
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.body {
+		flex: 1;
+	}
+</style>

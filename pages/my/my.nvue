@@ -35,6 +35,24 @@
 			</view>
 		</view>
 		<view class="menu-box">
+			<!-- <navigator url="/pages/my/article-list/article-list" hover-class="none">
+				<view class="menu-item">
+					<view class="menu-item__left">
+						<image class="menu-icon" src="/static/images/friends.png" mode="aspectFit"></image>
+						<text class="menu-text">我的朋友圈</text>
+					</view>
+					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+				</view>
+			</navigator> -->
+			<navigator url="/pages/my/video-list/video-list" hover-class="none">
+				<view class="menu-item">
+					<view class="menu-item__left">
+						<image class="menu-icon" src="/static/images/my-video.png" mode="aspectFit"></image>
+						<text class="menu-text">我的视频</text>
+					</view>
+					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+				</view>
+			</navigator>
 			<view class="menu-item" @tap="_createLive">
 				<view class="menu-item__left">
 					<image class="menu-icon" src="/static/images/live.png" mode="aspectFit"></image>
@@ -47,15 +65,6 @@
 					<view class="menu-item__left">
 						<image class="menu-icon" src="/static/images/jilu.png" mode="aspectFit"></image>
 						<text class="menu-text">直播历史</text>
-					</view>
-					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
-				</view>
-			</navigator>
-			<navigator url="/pages/my/video-list/video-list" hover-class="none">
-				<view class="menu-item">
-					<view class="menu-item__left">
-						<image class="menu-icon" src="/static/images/my-video.png" mode="aspectFit"></image>
-						<text class="menu-text">我的视频</text>
 					</view>
 					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 				</view>

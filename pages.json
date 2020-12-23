@@ -256,6 +256,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/article-list/article-list",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的朋友圈",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
