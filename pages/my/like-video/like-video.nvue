@@ -18,7 +18,7 @@
 			<cell v-if="init">
 				<text class="alert">正在加载...</text>
 			</cell>
-			<cell v-if="!init && list.length === 0">
+			<cell v-if="noData && list.length === 0">
 				<text class="alert">暂无数据</text>
 			</cell>
 			<cell v-if="loading">

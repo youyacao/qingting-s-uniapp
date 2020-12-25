@@ -54,15 +54,15 @@
 								<image class="comment-item__avatar" :src="item.avatar" mode=""></image>
 								<view class="comment-item__right">
 									<view class="comment-item__head">
-										<view class="comment-item__left">
+										<view class="comment-item__left" @tap="_reply(item)">
 											<text class="comment-item__username">{{ item.nickname || item.username }}</text>
 											<view class="comment-content">
 												<text class="comment-content__text">{{ item.content }}</text>
 											</view>
 										</view>
 										<view class="comment-like">
-											<image class="comment-like__icon" src="/static/images/like-red.png" mode="" @tap="_cancelCommentPraise(item)" v-if="item.is_like"></image>
-											<image class="comment-like__icon" src="/static/images/like-grey.png" mode="" @tap="_commentPraise(item)" v-else></image>
+											<image class="comment-like__icon" src="/static/images/dianzan-red.png" mode="" @tap="_cancelCommentPraise(item)" v-if="item.is_like"></image>
+											<image class="comment-like__icon" src="/static/images/dianzan-white.png" mode="" @tap="_commentPraise(item)" v-else></image>
 											<text class="comment-like__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 										</view>
 									</view>
@@ -141,6 +141,11 @@
 		},
 		components: { VVideo },
 		methods: {
+			_reply(item) {
+				uni.navigateTo({
+					url: `/pages/reply/reply?item=${encodeURIComponent(JSON.stringify(item))}`
+				})
+			},
 			_cancelCommentPraise(item) {
 				CancelCommentPraise({
 					comment_id: item.id

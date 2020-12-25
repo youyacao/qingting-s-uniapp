@@ -16,7 +16,6 @@
 			<view class="play-icon__box" v-if="isPause" @tap="onTap">
 				<image class="play-icon" src="/static/images/play-icon.png" mode=""></image>
 			</view>
-		<!-- <v-progress class="progress" :detail="detail"></v-progress> -->
 		<v-slider
 			class="progress"
 			v-model="sliderValue"
@@ -28,7 +27,6 @@
 
 <script>
 	import { mapGetters, mapState } from 'vuex'
-	import VProgress from '@/components/v-progress/v-progress'
 	import { VideoPlayback } from '@/common/api.js'
 	
 	export default {

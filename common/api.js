@@ -189,3 +189,8 @@ export const RemoveArticle = (data) => {
 export const LikeVideoList = (data) => {
 	return post('like/list', data)
 }
+
+// 评论的评论
+export const ReplyList = (data) => {
+	return post('comment/commentList', data)
+}

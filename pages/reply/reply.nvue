@@ -1,0 +1,288 @@
+<template>
+	<view class="body">
+		<view class="item mt-32">
+			<image class="avatar" :src="item.avatar" mode=""></image>
+			<view class="center" @tap="_reply(item, false)">
+				<text class="nickname">{{ item.nickname || item.username }}</text>
+				<text class="time">{{ item.mtime }}</text>
+				<view class="content">
+					<text class="content-text">{{ item.content }}</text>
+				</view>
+			</view>
+			<view class="right">
+				<image class="dianzan-icon" src="/static/images/dianzan-red.png" mode="" v-if="item.is_like === 1" @tap="_unpraise(item, '')"></image>
+				<image class="dianzan-icon" src="/static/images/dianzan-white.png" mode="" v-else @tap="_praise(item, '')"></image>
+				<text class="dianzan-text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
+			</view>
+		</view>
+		<text class="label">全部评论</text>
+		<list class="list" @loadmore="_loadmore">
+			<cell v-for="(item, index) in list" :key="index">
+				<view class="item">
+					<image class="avatar" :src="item.avatar" mode=""></image>
+					<view class="center" @tap="_reply(item, true)">
+						<text class="nickname">{{ item.nickname || item.username }}</text>
+						<text class="time">{{ item.mtime }}</text>
+						<view class="content">
+							<text class="content-text">{{ item.content }}</text>
+						</view>
+						<view class="reply" v-if="item.is_reply === 1">
+							<text class="reply-text">@{{ item.reply_user.nickname || item.reply_user.username }}: {{ item.reply_user.content }}</text>
+						</view>
+					</view>
+					<view class="right">
+						<image class="dianzan-icon" src="/static/images/dianzan-red.png" mode="" v-if="item.is_like === 1" @tap="_unpraise(item, index)"></image>
+						<image class="dianzan-icon" src="/static/images/dianzan-white.png" mode="" v-else @tap="_praise(item, index)"></image>
+						<text class="dianzan-text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
+					</view>
+				</view>
+			</cell>
+			<cell v-if="init">
+				<text class="alert">正在加载...</text>
+			</cell>
+			<cell v-if="noData && list.length === 0">
+				<text class="alert">暂无数据</text>
+			</cell>
+			<cell v-if="loading">
+				<text class="alert">加载更多中...</text>
+			</cell>
+			<cell v-if="noData && list.length > 10">
+				<text class="alert">没有更多了</text>
+			</cell>
+		</list>
+		<view class="foot">
+			<input type="text" class="input" v-model="content" :placeholder="placeholder" :adjust-position="false" :autofocus="autofocus" @confirm="_submit" />
+			<image class="icon" src="/static/images/send.png" mode="" @tap="_submit"></image>
+		</view>
+	</view>
+</template>
+
+<script>
+	import { ReplyList, Comment, CommentPraise, CancelCommentPraise } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {
+				item: null,
+				page: 1,
+				commentId: '',
+				placeholder: '',
+				content: '',
+				list: [],
+				loading: false,
+				init: true,
+				noData: false,
+				autofocus: false
+			};
+		},
+		onLoad(option) {
+			this.item = JSON.parse(decodeURIComponent(option.item))
+			this.placeholder = `回复 @${this.item.nickname || this.item.username}`
+			this._getReplyList()
+		},
+		methods: {
+			_unpraise(item, index) {
+				CancelCommentPraise({
+					comment_id: item.id
+				}).then(({ code, msg }) => {
+					if (code === 200) {
+						uni.showToast({
+							title: msg,
+							icon: 'success'
+						})
+						if (index !== '') {
+							this.list[index].is_like = 0
+							this.list[index].like_num--
+						} else {
+							this.item.is_like = 0
+							this.item.like_num--
+						}
+					} else {
+						uni.showToast({
+							title: msg,
+							icon: 'none'
+						})
+					}
+				})
+			},
+			_praise(item, index) {
+				CommentPraise({
+					comment_id: item.id
+				}).then(({ code, msg }) => {
+					if (code === 200) {
+						uni.showToast({
+							title: msg,
+							icon: 'success'
+						})
+						if (index !== '') {
+							this.list[index].is_like = 1
+							this.list[index].like_num++
+						} else {
+							this.item.is_like = 1
+							this.item.like_num++
+						}
+					} else {
+						uni.showToast({
+							title: msg,
+							icon: 'none'
+						})
+					}
+				})
+			},
+			_getReplyList() {
+				ReplyList({
+					type: 1,
+					vid: this.item.vid,
+					pid: this.item.id,
+					page: this.page,
+					limit: 10
+				}).then(({ code, data }) => {
+					if (code === 200) {
+						const { total, total_page, current_page, list } = data
+						if (current_page === 1) {
+							this.list = list
+						} else {
+							this.list = this.list.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.noData = true
+						}
+						uni.setNavigationBarTitle({
+							title: `回复(${total})`
+						})
+					}
+					this.init = false
+					this.loading = false
+				})
+			},
+			_submit() {
+				uni.hideKeyboard()
+				if (!this.content) {
+					return uni.showToast({
+						title: '评论内容不能为空',
+						icon: 'none'
+					})
+				}
+				Comment({
+					type: 1,
+					vid: this.item.vid,
+					content: this.content,
+					pid: this.item.id,
+					comment_id: this.commentId
+				}).then(({ code, msg }) => {
+					this.content = ''
+					if (code === 200) {
+						uni.showToast({
+							title: msg,
+							icon: 'success'
+						})
+						this._getReplyList()
+					} else {
+						uni.showToast({
+							title: msg,
+							icon: 'none'
+						})
+					}
+				})
+			},
+			_loadmore() {
+				if (this.noData) return
+				this.loading = true
+				this.page++
+				this._getReplyList()
+			},
+			_reply(item, bool) {
+				this.placeholder = `回复 @${item.nickname || item.username}`
+				if (bool) {
+					this.commentId = item.id
+				}
+				this.autofocus = true
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.reply-text {
+		font-size: 28rpx;
+		color: #999999;
+	}
+	.reply {
+		margin-top: 12rpx;
+	}
+	.mt-32 {
+		margin-top: 32rpx;
+	}
+	.label {
+		font-size: 32rpx;
+		padding: 0 32rpx 32rpx;
+		color: #FFFFFF;
+	}
+	.dianzan-text {
+		font-size: 28rpx;
+		color: #999999;
+		margin-top: 6rpx;
+	}
+	.time {
+		font-size: 28rpx;
+		color: #999999;
+	}
+	.nickname {
+		font-size: 28rpx;
+		color: #999999;
+		margin-bottom: 6rpx;
+	}
+	.content-text {
+		font-size: 32rpx;
+		color: #FFFFFF;
+		padding-top: 24rpx;
+	}
+	.right {
+		align-items: center;
+	}
+	.center {
+		flex: 1;
+		margin-right: 24rpx;
+	}
+	.dianzan-icon {
+		width: 40rpx;
+		height: 40rpx;
+	}
+	.item {
+		padding: 0 32rpx 32rpx;
+		flex-direction: row;
+		align-items: flex-start;
+	}
+	.avatar {
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 50%;
+		margin-right: 24rpx;
+	}
+	.alert {
+		font-size: 24rpx;
+		color: #999999;
+		text-align: center;
+		padding: 32rpx 0;
+	}
+	.input {
+		font-size: 28rpx;
+		color: #FFFFFF;
+		flex: 1;
+	}
+	.foot {
+		flex-direction: row;
+		align-items: center;
+		padding: 0 32rpx;
+		height: 80rpx;
+		background-color: #192131;
+	}
+	.icon {
+		width: 40rpx;
+		height: 40rpx;
+		margin-left: 24rpx;
+	}
+	.body {
+		flex: 1;
+	}
+</style>

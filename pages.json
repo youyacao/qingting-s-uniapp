@@ -78,13 +78,6 @@
 			}
 
 		}, {
-			"path": "components/v-progress/v-progress",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
 			"path": "pages/my/my",
 			"style": {
 				"navigationBarTitleText": "",
@@ -290,6 +283,15 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
 				"navigationStyle": "custom"
+            }
+            
+        }
+        ,{
+            "path" : "pages/reply/reply",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
             }
             
         }

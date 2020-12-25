@@ -88,10 +88,10 @@
 				</view>
 			</navigator>
 			<view style="margin-top: 50rpx;">
-			<text class="copy">系统开发商：一颗优雅草科技-蜻蜓S系统（直播）</text>
-					<text class="copy">官网：songshu.youyacao.com</text>
-			<text class="copy">本系统所有内容仅供功能演示不做其他一切商业用户</text>
-			<text class="copy">服务器：腾讯云  内容识别：知道创宇 美颜剪辑：涂图科技</text>
+				<text class="copy">系统开发商：一颗优雅草科技-蜻蜓S系统（直播）</text>
+				<text class="copy">官网：songshu.youyacao.com</text>
+				<text class="copy">本系统所有内容仅供功能演示不做其他一切商业用途</text>
+				<text class="copy">服务器：腾讯云  内容识别：知道创宇 美颜剪辑：涂图科技</text>
 			</view>
 		</view>
 		<view class="nav-box">
@@ -151,10 +151,10 @@
 </script>
 
 <style lang="scss" scoped>
-	.copy{
+	.copy {
 		color: #b1acac;
 		font-size: 24rpx;
-text-align: center;
+		text-align: center;
 	}
 	
 	.nav-box {
@@ -265,5 +265,6 @@ text-align: center;
 	}
 	.body {
 		background-color: #252a34;
+		margin-bottom: 50px;
 	}
 </style>
