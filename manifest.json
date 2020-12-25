@@ -2,8 +2,8 @@
     "name" : "蜻蜓S系统",
     "appid" : "__UNI__64B56AC",
     "description" : "",
-    "versionName" : "1.6.0",
-    "versionCode" : 1600,
+    "versionName" : "1.8.2",
+    "versionCode" : 182,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
