@@ -28,11 +28,11 @@
 					<view class="mb-32">
 						<image class="like-icon" src="/static/images/like-red.png" mode="" @tap="_cancelPraise(item)" v-if="item.is_like"></image>
 						<image class="like-icon" src="/static/images/like-white.png" mode="" @tap="_praise(item)" v-else></image>
-						<text class="right-text">{{ item.like_num.length > 4 ? item.like_num_str : item.like_num }}</text>
+						<text class="right-text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 					</view>
 					<view class="mb-32" @tap="_openCommentPopup(item)">
 						<image class="comment-icon" src="/static/images/comment.png" mode=""></image>
-						<text class="right-text">{{ item.comment_num.length > 4 ? item.comment_num_str : item.comment_num }}</text>
+						<text class="right-text">{{ item.comment_num.length > 3 ? item.comment_num_str : item.comment_num }}</text>
 					</view>
 					<view>
 						<image class="share-icon" src="/static/images/share.png" mode=""></image>
@@ -44,7 +44,7 @@
 		<uni-popup ref="popup" type="bottom" @change="_commentPopupChange">
 			<view class="comment-box" :style="{'height': `${windowHeight * 0.7}px`}">
 				<view class="comment-head">
-					<text class="comment-head__text">{{ video.comment_num.length > 4 ? video.comment_num_str : video.comment_num }} 条评论</text>
+					<text class="comment-head__text">{{ video.comment_num.length > 3 ? video.comment_num_str : video.comment_num }} 条评论</text>
 					<image class="comment-head__icon" src="/static/images/close.png" mode="" @tap="$refs.popup.close()"></image>
 				</view>
 				<view class="list-box">
@@ -63,7 +63,7 @@
 										<view class="comment-like">
 											<image class="comment-like__icon" src="/static/images/like-red.png" mode="" @tap="_cancelCommentPraise(item)" v-if="item.is_like"></image>
 											<image class="comment-like__icon" src="/static/images/like-grey.png" mode="" @tap="_commentPraise(item)" v-else></image>
-											<text class="comment-like__text">{{ item.like_num.length > 4 ? item.like_num_str : item.like_num }}</text>
+											<text class="comment-like__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 										</view>
 									</view>
 									<view class="comment-foot">
@@ -219,17 +219,7 @@
 					}
 				})
 			},
-			_commentPopupChange({ show }) {
-				if (show) {
-					// if (this.videoContext) {
-					// 	this.videoContext.pause()
-					// }
-				} else {
-					// if (this.videoContext) {
-					// 	this.videoContext.play()
-					// }
-				}
-			},
+			_commentPopupChange({ show }) {},
 			_follow(item) {
 				Follow({
 					follow_id: item.user_id

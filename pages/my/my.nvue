@@ -53,6 +53,15 @@
 					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 				</view>
 			</navigator>
+			<navigator url="/pages/my/like/like" hover-class="none">
+				<view class="menu-item">
+					<view class="menu-item__left">
+						<image class="menu-icon" src="/static/images/like.png" mode="aspectFit"></image>
+						<text class="menu-text">我喜欢的</text>
+					</view>
+					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+				</view>
+			</navigator>
 			<view class="menu-item" @tap="_createLive">
 				<view class="menu-item__left">
 					<image class="menu-icon" src="/static/images/live.png" mode="aspectFit"></image>

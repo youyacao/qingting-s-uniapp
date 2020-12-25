@@ -32,9 +32,7 @@ const store = new Vuex.Store({
 			uni.setStorage({
 			    key: 'userinfo',
 			    data,
-			    success: () => {
-			        console.log('用户信息保存成功')
-			    }
+			    success: () => {}
 			})
 		},
 		setPath(state, path) {

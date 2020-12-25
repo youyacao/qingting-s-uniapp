@@ -265,6 +265,34 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/like-video/like-video",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我喜欢的",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/like/like",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我喜欢的",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/like-message/like-message",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

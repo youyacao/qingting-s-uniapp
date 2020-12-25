@@ -1,0 +1,67 @@
+<template>
+	<view class="body">
+		<view class="head">
+			<text class="head-text" :class="{'active': current === 0}" @tap="current = 0">视频</text>
+			<text class="head-text" :class="{'active': current === 1}" @tap="current = 1">朋友圈</text>
+		</view>
+		<swiper class="swiper" :current="current" @change="_change">
+			<swiper-item>
+				<like-video ref="likeVideo"></like-video>
+			</swiper-item>
+			<swiper-item>
+				<like-message ref="likeMessage"></like-message>
+			</swiper-item>
+		</swiper>
+	</view>
+</template>
+
+<script>
+	import LikeVideo from '../like-video/like-video.nvue'
+	import LikeMessage from '../like-message/like-message.nvue'
+	
+	export default {
+		data() {
+			return {
+				current: 0
+			};
+		},
+		components: { LikeVideo, LikeMessage },
+		onShow() {
+			this.$nextTick(() => {
+				this.$refs.likeVideo._getLikeVideoList()
+				this.$refs.likeMessage._getLikeMessageList()
+			})
+		},
+		methods: {
+			_change({ detail }) {
+				this.current = detail.current
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.active {
+		border-bottom-width: 2rpx;
+		border-bottom-color: #4CD964;
+		height: 80rpx;
+		line-height: 80rpx;
+	}
+	.head-text {
+		color: #FFFFFF;
+		font-size: 32rpx;
+		flex: 1;
+		text-align: center;
+	}
+	.head {
+		flex-direction: row;
+		padding: 0 32rpx;
+		align-items: center;
+	}
+	.swiper {
+		flex: 1;
+	}
+	.body {
+		flex: 1;
+	}
+</style>

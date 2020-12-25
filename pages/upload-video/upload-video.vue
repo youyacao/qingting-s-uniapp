@@ -221,7 +221,7 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-		background-color: #000000;
+		background-color: #0E1727;
 	}
 	.video {
 		width: 150rpx;

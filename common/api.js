@@ -184,3 +184,8 @@ export const RrticleList = (data) => {
 export const RemoveArticle = (data) => {
 	return post('article/del', data)
 }
+
+// 我喜欢的
+export const LikeVideoList = (data) => {
+	return post('like/list', data)
+}

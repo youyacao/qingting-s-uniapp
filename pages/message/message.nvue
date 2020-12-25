@@ -44,8 +44,9 @@
 								</view>
 								<view class="item-foot">
 									<view class="item-foot__col">
-										<image class="item-foot__icon" src="/static/images/dianzan-white.png" mode="aspectFit"></image>
-										<text class="item-foot__text">{{ item.like_num_str }}</text>
+										<image class="item-foot__icon like-icon" src="/static/images/dianzan-red.png" mode="aspectFit" v-if="item.is_like === 1" @tap="_unlike(item, index)"></image>
+										<image class="item-foot__icon like-icon" src="/static/images/dianzan-white.png" mode="aspectFit" v-else @tap="_like(item, index)"></image>
+										<text class="item-foot__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 									</view>
 									<view class="item-foot__col">
 										<image class="item-foot__icon" src="/static/images/comment-icon.png" mode="aspectFit"></image>
@@ -100,8 +101,9 @@
 								</view>
 								<view class="item-foot">
 									<view class="item-foot__col">
-										<image class="item-foot__icon" src="/static/images/dianzan-white.png" mode="aspectFit"></image>
-										<text class="item-foot__text">{{ item.like_num_str }}</text>
+										<image class="item-foot__icon like-icon" src="/static/images/dianzan-red.png" mode="aspectFit" v-if="item.is_like === 1" @tap="_unlike(item, index)"></image>
+										<image class="item-foot__icon like-icon" src="/static/images/dianzan-white.png" mode="aspectFit" v-else @tap="_like(item, index)"></image>
+										<text class="item-foot__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 									</view>
 									<view class="item-foot__col">
 										<image class="item-foot__icon" src="/static/images/comment-icon.png" mode="aspectFit"></image>
@@ -142,7 +144,9 @@
 <script>
 	import {
 		ArticleList,
-		FocusArticleList
+		FocusArticleList,
+		Praise,
+		CancelPraise
 	} from '@/common/api.js'
 	import {
 		toTwoArray
@@ -174,6 +178,56 @@
 			uni.hideTabBar()
 		},
 		methods: {
+			_unlike(item, index) {
+				CancelPraise({
+					vid: item.id,
+					type: 2
+				}).then(({ code, msg }) => {
+					if (code === 200) {
+						if (this.current) {
+							this.focusList[index].is_like = 0
+							this.focusList[index].like_num--
+						} else {
+							this.list[index].is_like = 0
+							this.list[index].like_num--
+						}
+						uni.showToast({
+							title: msg,
+							icon: 'success'
+						})
+					} else {
+						uni.showToast({
+							title: msg,
+							icon: 'error'
+						})
+					}
+				})
+			},
+			_like(item, index) {
+				Praise({
+					vid: item.id,
+					type: 2
+				}).then(({ code, msg }) => {
+					if (code === 200) {
+						if (this.current) {
+							this.focusList[index].is_like = 1
+							this.focusList[index].like_num++
+						} else {
+							this.list[index].is_like = 1
+							this.list[index].like_num++
+						}
+						uni.showToast({
+							title: msg,
+							icon: 'success'
+						})
+					} else {
+						uni.showToast({
+							title: msg,
+							icon: 'error'
+						})
+					}
+				})
+			},
 			_viewImages(images) {
 				uni.previewImage({
 					urls: images,
@@ -290,6 +344,10 @@
 </script>
 
 <style lang="scss" scoped>
+	.like-icon {
+		width: 35rpx;
+		height: 35rpx;
+	}
 	.nav-box {
 		position: fixed;
 		bottom: 0;
