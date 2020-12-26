@@ -16,6 +16,7 @@
 </template>
 
 <script>
+	import MD5 from 'crypto-js/md5'
 	import { Categories, PostArticle, UploadImage } from '@/common/api.js'
 	import { BASE_URL } from '@/common/config.js'
 	import { getToken } from '@/common/common.js'
@@ -31,42 +32,19 @@
 					label: '选择分类'
 				},
 				fileList: [],
-				loading: false
+				loading: false,
+				machineResult: {
+					Normal: "正常",
+					Polity: "涉政",
+					Sex: "色情",
+					Terror: "暴恐",
+					Legal: "违法违规",
+					Ad: "广告"
+				}
 			};
 		},
 		onLoad() {
 			this._getCategories()
-			// UploadImage().then(({ code, msg }) => {
-			// 	console.log(code, msg)
-			// })
-			
-			// uni.chooseImage({
-			//     success: (chooseImageRes) => {
-			//         const tempFilePaths = chooseImageRes.tempFilePaths
-			// 		let _time = 0
-			// 		const _timer = setInterval(() => {
-			// 			_time++
-			// 		}, 100)
-			//         uni.uploadFile({
-			//         	url: `${BASE_URL}upload`,
-			//         	filePath: tempFilePaths[0],
-			//         	header: {
-			//         		authorization: getToken()
-			//         	},
-			//         	name: 'file',
-			//         	success: (uploadFileRes) => {
-			//         		console.log(uploadFileRes)
-			//         	},
-			//         	fail: (error) => {
-			//         		console.log(error)
-			//         	},
-			//         	complete: () => {
-			// 				clearInterval(_timer)
-			//         		console.log('complete', _time)
-			//         	}
-			//         })
-			//     }
-			// })
 		},
 		methods: {
 			_submit() {
@@ -122,11 +100,10 @@
 						name: 'file',
 						success: (uploadFileRes) => {
 							const { code, data } = JSON.parse(uploadFileRes.data)
-							console.log('上传成功', code, data)
 							if (code === 200) {
 								_length++
 								if (data.url) {
-									this.fileList.push(data.url)
+									this._check(data.url, index)
 								}
 							} else {
 								_errIndex.push(index)
@@ -157,6 +134,47 @@
 							}
 						}
 					})
+				})
+			},
+			_check(content, index) {
+				const n = '422108995@qq.com'
+				const app_key = 'c817446b0d1c45dda93b4abaffaadac0e6051ed687cb4d0cb42ffdf592e4debe'
+				const customer_code = '232020122515494276'
+				const content_id = new Date().getTime()
+				const s = parseInt(content_id / 1000)
+				const t = MD5(`${s}${app_key}`).toString()
+				
+				uni.request({
+				    url: `https://kmscli.qixincha.com/client/purify/image/?n=${n}&t=${t}&s=${s}`,
+					method: 'POST',
+				    data: {
+						customer_code,
+						content_id,
+						content
+					},
+				    header: {
+						'content-type': 'application/x-www-form-urlencoded'
+					},
+				    success: ({ data }) => {
+				        console.log(data)
+						const { machine_result } = data
+						if (machine_result === 'Normal') {
+							this.fileList.push(content)
+						} else {
+							const msg = this.machineResult[machine_result]
+							uni.showToast({
+								title: `检测到您上传的图片涉及${msg}，已自动删除。`,
+								icon: 'none'
+							})
+							this.$refs.uUpload.remove(index)
+						}
+				    },
+					fail: (err) => {
+						console.log(err)
+					},
+					complete: () => {
+						console.log('complete')
+					}
 				})
 			},
 			onRemove(index, lists, name) {
