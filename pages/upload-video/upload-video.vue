@@ -119,12 +119,12 @@
 				this.selectItem = e[1]
 			},
 			_submit() {
-				if (this.testing) {
-					return uni.showToast({
-						title: '视频内容安全检测中...',
-						icon: 'none'
-					})
-				}
+				// if (this.testing) {
+				// 	return uni.showToast({
+				// 		title: '视频内容安全检测中...',
+				// 		icon: 'none'
+				// 	})
+				// }
 				this.loading = true
 				ReleaseVideo({
 					category_id: this.selectItem.value,
@@ -173,13 +173,29 @@
 					})
 				}
 				if (this.uploadProgress === 100) {
-					this._submit()
+					this.loading = true
+					this._checkText(this.title)
 				} else {
 					uni.showToast({
 						title: '请等待文件上传完成',
 						icon: 'none'
 					})
 				}
+			},
+			_checkText(content) {
+				Test('text', content).then(({ machine_result }) => {
+					if (machine_result === 'Normal') {
+						this._submit()
+					} else {
+						const msg = this.machineResult[machine_result]
+						uni.showToast({
+							title: `检测到您的文字内容涉及${msg}，请重新输入。`,
+							icon: 'none'
+						})
+						this.loading = false
+						this.title = ''
+					}
+				})
 			},
 			_uploadVideo() {
 				const uploadTask = uni.uploadFile({
