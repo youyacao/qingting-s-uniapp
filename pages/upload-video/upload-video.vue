@@ -37,6 +37,7 @@
 	import { getToken } from '@/common/common.js'
 	import VTabbar from '@/components/v-tabbar/v-tabbar.nvue'
 	import { mapActions } from 'vuex'
+	import Test from '@/common/test.js'
 	
 	export default {
 		data() {
@@ -52,7 +53,16 @@
 				title: '',
 				loading: false,
 				uploadProgress: 0,
-				videoContext: null
+				videoContext: null,
+				machineResult: {
+					Normal: "正常",
+					Polity: "涉政",
+					Sex: "色情",
+					Terror: "暴恐",
+					Legal: "违法违规",
+					Ad: "广告"
+				},
+				testing: false
 			};
 		},
 		components: { VTabbar },
@@ -109,6 +119,13 @@
 				this.selectItem = e[1]
 			},
 			_submit() {
+				if (this.testing) {
+					return uni.showToast({
+						title: '视频内容安全检测中...',
+						icon: 'none'
+					})
+				}
+				this.loading = true
 				ReleaseVideo({
 					category_id: this.selectItem.value,
 					title: this.title,
@@ -156,7 +173,6 @@
 					})
 				}
 				if (this.uploadProgress === 100) {
-					this.loading = true
 					this._submit()
 				} else {
 					uni.showToast({
@@ -176,9 +192,9 @@
 					formData: {},
 					success: (uploadFileRes) => {
 						const { code, msg, data } = JSON.parse(uploadFileRes.data)
-						console.log('视频上传成功', code, msg, data)
 						if (code === 200) {
 							this.video = data
+							// this._checkVideo(data.url)
 						} else {
 							uni.showToast({
 								title: msg,
@@ -192,9 +208,24 @@
 				})
 				uploadTask.onProgressUpdate((res) => {
 					this.uploadProgress = res.progress
-					console.log('上传进度', res.progress)
-					// console.log('已经上传的数据长度', res.totalBytesSent)
-					// console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
+				})
+			},
+			_checkVideo(content) {
+				this.testing = true
+				Test('video', content).then(({ machine_result }) => {
+					this.testing = false
+					if (machine_result !== 'Normal') {
+						const msg = this.machineResult[machine_result]
+						uni.showToast({
+							title: `检测到您的视频涉及${msg}，请重新选择。`,
+							icon: 'none'
+						})
+						this.src = ''
+						this.video = ''
+						this.uploadProgress = 0
+					}
+				}).catch(err => {
+					this.testing = false
 				})
 			}
 		},

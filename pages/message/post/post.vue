@@ -16,10 +16,10 @@
 </template>
 
 <script>
-	import MD5 from 'crypto-js/md5'
 	import { Categories, PostArticle, UploadImage } from '@/common/api.js'
 	import { BASE_URL } from '@/common/config.js'
 	import { getToken } from '@/common/common.js'
+	import Test from '@/common/test.js'
 	
 	export default {
 		data() {
@@ -61,26 +61,7 @@
 					})
 				}
 				this.loading = true
-				PostArticle({
-					type: 1,
-					category_id: this.selectItem.value,
-					content: this.content,
-					images: this.fileList
-				}).then(({ code, msg }) => {
-					this.loading = false
-					if (code === 200) {
-						this.$refs.uToast.show({
-							title: msg,
-							type: 'success',
-							back: true
-						})
-					} else {
-						this.$refs.uToast.show({
-							title: msg,
-							type: 'error'
-						})
-					}
-				})
+				this._checkText(this.content)
 			},
 			onChooseComplete(lists) {
 				uni.showLoading({
@@ -89,7 +70,6 @@
 				let _length = 0
 				let _count = 0
 				let _errIndex = []
-				console.log(lists)
 				lists.map((item, index) => {
 					uni.uploadFile({
 						url: `${BASE_URL}upload`,
@@ -103,7 +83,7 @@
 							if (code === 200) {
 								_length++
 								if (data.url) {
-									this._check(data.url, index)
+									this._checkImage(data.url, index)
 								}
 							} else {
 								_errIndex.push(index)
@@ -136,44 +116,54 @@
 					})
 				})
 			},
-			_check(content, index) {
-				const n = '422108995@qq.com'
-				const app_key = 'c817446b0d1c45dda93b4abaffaadac0e6051ed687cb4d0cb42ffdf592e4debe'
-				const customer_code = '232020122515494276'
-				const content_id = new Date().getTime()
-				const s = parseInt(content_id / 1000)
-				const t = MD5(`${s}${app_key}`).toString()
-				
-				uni.request({
-				    url: `https://kmscli.qixincha.com/client/purify/image/?n=${n}&t=${t}&s=${s}`,
-					method: 'POST',
-				    data: {
-						customer_code,
-						content_id,
-						content
-					},
-				    header: {
-						'content-type': 'application/x-www-form-urlencoded'
-					},
-				    success: ({ data }) => {
-				        console.log(data)
-						const { machine_result } = data
-						if (machine_result === 'Normal') {
-							this.fileList.push(content)
-						} else {
-							const msg = this.machineResult[machine_result]
-							uni.showToast({
-								title: `检测到您上传的图片涉及${msg}，已自动删除。`,
-								icon: 'none'
-							})
-							this.$refs.uUpload.remove(index)
-						}
-				    },
-					fail: (err) => {
-						console.log(err)
-					},
-					complete: () => {
-						console.log('complete')
+			_checkImage(content, index) {
+				Test('image', content).then(({ machine_result }) => {
+					if (machine_result === 'Normal') {
+						this.fileList.push(content)
+					} else {
+						const msg = this.machineResult[machine_result]
+						uni.showToast({
+							title: `检测到您的图片涉及${msg}，已自动删除。`,
+							icon: 'none'
+						})
+						this.$refs.uUpload.remove(index)
+					}
+				})
+			},
+			_checkText(content) {
+				Test('text', content).then(({ machine_result }) => {
+					if (machine_result === 'Normal') {
+						this._post()
+					} else {
+						const msg = this.machineResult[machine_result]
+						uni.showToast({
+							title: `检测到您的文字内容涉及${msg}，请重新输入。`,
+							icon: 'none'
+						})
+						this.loading = false
+						this.content = ''
+					}
+				})
+			},
+			_post() {
+				PostArticle({
+					type: 1,
+					category_id: this.selectItem.value,
+					content: this.content,
+					images: this.fileList
+				}).then(({ code, msg }) => {
+					this.loading = false
+					if (code === 200) {
+						this.$refs.uToast.show({
+							title: msg,
+							type: 'success',
+							back: true
+						})
+					} else {
+						this.$refs.uToast.show({
+							title: msg,
+							type: 'error'
+						})
 					}
 				})
 			},
