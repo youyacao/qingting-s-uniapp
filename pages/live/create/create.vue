@@ -79,7 +79,7 @@
 				} else {
 					uni.showToast({
 						title: '请开启摄像头权限',
-						icon: 'error'
+						icon: 'none'
 					})
 				}
 			},
@@ -109,7 +109,7 @@
 					} else {
 						uni.showToast({
 							title: '请开启摄像头权限',
-							icon: 'error'
+							icon: 'none'
 						})
 					}
 				} else {

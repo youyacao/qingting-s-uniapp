@@ -198,7 +198,7 @@
 					} else {
 						uni.showToast({
 							title: msg,
-							icon: 'error'
+							icon: 'none'
 						})
 					}
 				})
@@ -223,7 +223,7 @@
 					} else {
 						uni.showToast({
 							title: msg,
-							icon: 'error'
+							icon: 'none'
 						})
 					}
 				})
