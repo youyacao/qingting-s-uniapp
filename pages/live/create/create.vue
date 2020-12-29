@@ -27,10 +27,11 @@
 </template>
 
 <script>
+	import permision from "@/js_sdk/wa-permission/permission.js"
 	import { BASE_URL } from '@/common/config.js'
 	import { StartLive } from '@/common/api.js'
 	import { getToken } from '@/common/common.js'
-	import { mapMutations } from 'vuex'
+	import { mapMutations, mapGetters } from 'vuex'
 	
 	export default {
 		data() {
@@ -65,8 +66,23 @@
 				description: '注：高清转码和超清转码需要额外转码资源包费用，消耗更多推流流量'
 			};
 		},
+		computed: {
+			...mapGetters(['platform'])
+		},
 		methods: {
 			...mapMutations(['setPusherMode']),
+			async requestAndroidPermission(permisionID) {
+			    const result = await permision.requestAndroidPermission(permisionID)
+				if (result === 1) {
+					this.loading = true
+					this.$refs.uUpload.upload()
+				} else {
+					uni.showToast({
+						title: '请开启摄像头权限',
+						icon: 'error'
+					})
+				}
+			},
 			_submit() {
 				if (!this.title) {
 					return this.$refs.uToast.show({
@@ -82,8 +98,23 @@
 						position: 'top'
 					})
 				}
-				this.loading = true
-				this.$refs.uUpload.upload()
+				this._checkCamera()
+			},
+			_checkCamera() {
+				if (this.platform === 'ios') {
+					const camera = permision.judgeIosPermission("camera")
+					if (camera) {
+						this.loading = true
+						this.$refs.uUpload.upload()
+					} else {
+						uni.showToast({
+							title: '请开启摄像头权限',
+							icon: 'error'
+						})
+					}
+				} else {
+					this.requestAndroidPermission('android.permission.CAMERA')
+				}
 			},
 			_onSuccess(res) {
 				const { code, data } = res
