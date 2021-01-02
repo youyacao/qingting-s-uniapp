@@ -17,19 +17,19 @@
 		<view class="head">
 			<view class="head-box">
 				<view class="head-item" @tap="_toFans('/pages/my/fans/fans?current=1')">
-					<text class="head-item__value">0</text>
+					<text class="head-item__value">{{ userinfo.follow_num }}</text>
 					<text class="head-item__label">粉丝</text>
 				</view>
 				<view class="head-item" @tap="_toFans('/pages/my/fans/fans?current=0')">
-					<text class="head-item__value">0</text>
+					<text class="head-item__value">{{ userinfo.my_follow_num }}</text>
 					<text class="head-item__label">关注</text>
 				</view>
 				<view class="head-item">
-					<text class="head-item__value">0</text>
+					<text class="head-item__value">{{ userinfo.like_num }}</text>
 					<text class="head-item__label">获赞</text>
 				</view>
 				<view class="head-item" @tap="_toPromotion">
-					<text class="head-item__value">0</text>
+					<text class="head-item__value">{{ userinfo.ref_num }}</text>
 					<text class="head-item__label">推广</text>
 				</view>
 			</view>
