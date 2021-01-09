@@ -194,3 +194,18 @@ export const LikeVideoList = (data) => {
 export const ReplyList = (data) => {
 	return post('comment/commentList', data)
 }
+
+// 添加视频观看记录
+export const AddView = (data) => {
+	return post('video/historyAdd', data)
+}
+
+// 视频观看记录
+export const PlayRecords = (data) => {
+	return post('video/historyList', data)
+}
+
+// 系统配置
+export const Config = (data) => {
+	return post('config', data)
+}

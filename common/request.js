@@ -57,33 +57,6 @@ export const post = (url, data) => {
 	})
 }
 
-// export const upload = (url, data) => {
-// 	const { filePath, name } = data
-// 	return http.upload(`${BASE_URL}${url}`, {
-//     params: {}, /* 会加在url上 */
-//     // #ifdef APP-PLUS || H5
-//     files: [], // 需要上传的文件列表。使用 files 时，filePath 和 name 不生效。App、H5（ 2.6.15+）
-//     // #endif
-//     // #ifdef MP-ALIPAY
-//     fileType: 'image/video/audio', // 仅支付宝小程序，且必填。
-//     // #endif
-//     filePath, // 要上传文件资源的路径。
-//     name, // 文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
-//     header: {}, /* 会与全局header合并，如有同名属性，局部覆盖全局 */
-//     custom: {}, // 自定义参数
-//     formData: {}, // HTTP 请求中其他额外的 form data
-//     // 返回当前请求的task, options。请勿在此处修改options。非必填
-//     getTask: (task, options) => {
-//       // setTimeout(() => {
-//       //   task.abort()
-//       // }, 500)
-//     },
-//     //validateStatus: (statusCode) => { // statusCode 必存在。此处示例为全局默认配置。演示，非必填选项
-//     //	return statusCode >= 200 && statusCode < 300
-//     //}
-//   })
-// }
-
 // 请求之前
 http.interceptors.request.use((config) => {
 	try {

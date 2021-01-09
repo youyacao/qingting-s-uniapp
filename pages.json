@@ -295,6 +295,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/play-records/play-records",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "浏览记录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

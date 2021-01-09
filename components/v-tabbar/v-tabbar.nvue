@@ -40,7 +40,6 @@
 
 <style lang="scss" scoped>
 	.active {
-		border-bottom-width: 2rpx;
 		border-bottom-color: #FFFFFF;
 	}
 	.nav-item__icon {
@@ -48,12 +47,17 @@
 		height: 45rpx;
 	}
 	.nav-item__text {
+		color: #FFFFFF;
 		height: 50px;
 		line-height: 50px;
-		color: #FFFFFF;
-		font-size: 16px;
+		font-size: 28rpx;
+		/* #ifdef APP-NVUE */
 		border-bottom-width: 2rpx;
 		border-bottom-color: transparent;
+		/* #endif */
+		/* #ifndef APP-NVUE */
+		border-bottom: 2rpx solid transparent;
+		/* #endif */
 	}
 	.nav-item {
 		/* #ifndef APP-NVUE */
@@ -67,11 +71,14 @@
 	.nav {
 		/* #ifndef APP-NVUE */
 		display: flex;
+		border-top: 1rpx solid rgba($color: #909090, $alpha: 0.2);
 		/* #endif */
 		height: 50px;
 		flex-direction: row;
 		align-items: center;
-		border-top-color: rgba(255, 255, 255, 0.2);
+		/* #ifdef APP-NVUE */
+		border-top-color: rgba($color: #909090, $alpha: 0.2);
 		border-top-width: 1rpx;
+		/* #endif */
 	}
 </style>

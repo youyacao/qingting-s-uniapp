@@ -27,7 +27,7 @@
 
 <script>
 	import { mapGetters, mapState } from 'vuex'
-	import { VideoPlayback } from '@/common/api.js'
+	import { VideoPlayback, AddView } from '@/common/api.js'
 	
 	export default {
 		data() {
@@ -40,7 +40,8 @@
 					currentTime: 0,
 					duration: 0
 				},
-				sliderValue: 0
+				sliderValue: 0,
+				addViewTimer: null
 			};
 		},
 		computed: {
@@ -105,7 +106,13 @@
 				console.log(event)
 			},
 			onPlay() {
+				clearTimeout(this.addViewTimer)
 				this.isPlay = true
+				this.addViewTimer = setTimeout(() => {
+					AddView({
+						video_id: this.video.id
+					}).then(res => {})
+				}, 5000)
 				this.$emit('play', this.videoContext)
 			},
 			play() {
