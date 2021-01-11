@@ -2,7 +2,7 @@
 	<view class="body">
 		<u-cell-group>
 			<!-- <u-cell-item icon="setting-fill" title="个人设置"></u-cell-item> -->
-			<u-cell-item icon="level" title="当前版本" :value="`v ${version}`" @click="onAPPUpdate"></u-cell-item>
+			<u-cell-item icon="level" title="当前版本" :value="`${version}`" @click="onAPPUpdate"></u-cell-item>
 			<u-cell-item title="退出" @click="_logout"></u-cell-item>
 		</u-cell-group>
 	</view>
@@ -22,15 +22,12 @@
 			};
 		},
 		onLoad() {
-			// plus.runtime.getProperty(plus.runtime.appid, (wgtinfo) => {
-			// 	this.version = wgtinfo.version
-			// })
-			
-			// #ifdef APP-PLUS
-			getCurrentNo(res => {
-				this.version = res.version
+			plus.runtime.getProperty(plus.runtime.appid, (wgtinfo) => {
+				this.version = wgtinfo.version
 			})
-			// #endif
+			// getCurrentNo(res => {
+			// 	this.version = res.version
+			// })
 		},
 		methods: {
 			...mapMutations(['setPath']),
