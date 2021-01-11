@@ -303,6 +303,32 @@
                 "enablePullDownRefresh": false
             }
             
+        },
+		{
+		    "path" : "pages/my/download-records/download-records",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "下载记录",
+		        "enablePullDownRefresh": false
+		    }
+		}
+        ,{
+            "path" : "pages/my/task/task",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "任务中心",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/message/message",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "消息中心",
+                "enablePullDownRefresh": false
+            }
+            
         }
     ],
 	"globalStyle": {

@@ -1,0 +1,107 @@
+<template>
+	<view class="body">
+		<view class="label-box">
+			<text class="label-title">每日任务</text>
+			<text class="label-tip">每天做任务有惊喜</text>
+		</view>
+		<view class="task-box">
+			<text class="loading" v-if="loading">加载中...</text>
+			<view class="task-item" v-for="(item, index) in dailyTasks" :key="`dailyTasks_${index}`">
+				<text class="task-item__title">{{ item.title }}</text>
+				<view class="task-btn" @tap="_taskPickup(item)">
+					<text class="task-btn__text">领取</text>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import { TaskList, TaskPickup } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {
+				dailyTasks: [],
+				loading: false
+			};
+		},
+		onShow() {
+			this._getTaskList()
+		},
+		methods: {
+			_getTaskList() {
+				this.loading = true
+				TaskList().then(({ code, data }) => {
+					if (code === 200) {
+						this.dailyTasks = data.DAILY_TASK
+					}
+					this.loading = false
+				})
+			},
+			_taskPickup({ id }) {
+				TaskPickup({ task_id: id }).then(({ code, msg }) => {
+					uni.showToast({
+						title: msg,
+						icon: 'none'
+					})
+					if (code === 200) {
+						this._getTaskList()
+					}
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	.loading {
+		font-size: 24rpx;
+		text-align: center;
+	}
+	.task-btn__text {
+		font-size: 24rpx;
+	}
+	.task-btn {
+		border-color: #999999;
+		border-width: 1rpx;
+		padding: 0 32rpx;
+		height: 50rpx;
+		border-radius: 25rpx;
+		align-items: center;
+		justify-content: center;
+	}
+	.task-item__title {
+		font-size: 32rpx;
+		color: #333333;
+	}
+	.task-item {
+		height: 80rpx;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.task-box {
+		margin: 0 24rpx;
+		background-color: #FFFFFF;
+		border-radius: 12rpx;
+		padding: 20rpx;
+	}
+	.label-tip {
+		font-size: 28rpx;
+		color: #999999;
+	}
+	.label-title {
+		font-size: 34rpx;
+		color: #FFFFFF;
+	}
+	.label-box {
+		flex-direction: row;
+		align-items: flex-end;
+		justify-content: space-between;
+		padding: 32rpx 24rpx;
+	}
+	.body {
+		flex: 1;
+	}
+</style>

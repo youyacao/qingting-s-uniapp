@@ -35,32 +35,40 @@
 			</view>
 		</view>
 		<view class="menu-box">
-			<navigator url="/pages/my/article-list/article-list" hover-class="none">
-				<view class="menu-item">
-					<view class="menu-item__left">
-						<image class="menu-icon" src="/static/images/friends.png" mode="aspectFit"></image>
-						<text class="menu-text">我的朋友圈</text>
-					</view>
-					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+			<navigator url="/pages/my/article-list/article-list" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/friends.png" mode="aspectFit"></image>
+					<text class="menu-text">我的朋友圈</text>
 				</view>
+				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 			</navigator>
-			<navigator url="/pages/my/video-list/video-list" hover-class="none">
-				<view class="menu-item">
-					<view class="menu-item__left">
-						<image class="menu-icon" src="/static/images/my-video.png" mode="aspectFit"></image>
-						<text class="menu-text">我的视频</text>
-					</view>
-					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+			<navigator url="/pages/my/task/task" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/task.png" mode="aspectFit"></image>
+					<text class="menu-text">任务中心</text>
 				</view>
+				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 			</navigator>
-			<navigator url="/pages/my/like/like" hover-class="none">
-				<view class="menu-item">
-					<view class="menu-item__left">
-						<image class="menu-icon" src="/static/images/like.png" mode="aspectFit"></image>
-						<text class="menu-text">我喜欢的</text>
-					</view>
-					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+			<navigator url="/pages/my/message/message" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/message.png" mode="aspectFit"></image>
+					<text class="menu-text">消息中心</text>
 				</view>
+				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+			</navigator>
+			<navigator url="/pages/my/video-list/video-list" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/my-video.png" mode="aspectFit"></image>
+					<text class="menu-text">我的视频</text>
+				</view>
+				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+			</navigator>
+			<navigator url="/pages/my/like/like" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/like.png" mode="aspectFit"></image>
+					<text class="menu-text">我喜欢的</text>
+				</view>
+				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 			</navigator>
 			<view class="menu-item" @tap="_createLive">
 				<view class="menu-item__left">
@@ -69,14 +77,12 @@
 				</view>
 				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 			</view>
-			<navigator url="/pages/live/record/record" hover-class="none">
-				<view class="menu-item">
-					<view class="menu-item__left">
-						<image class="menu-icon" src="/static/images/jilu.png" mode="aspectFit"></image>
-						<text class="menu-text">直播历史</text>
-					</view>
-					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+			<navigator url="/pages/live/record/record" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/jilu.png" mode="aspectFit"></image>
+					<text class="menu-text">直播历史</text>
 				</view>
+				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 			</navigator>
 			<navigator url="/pages/my/play-records/play-records" hover-class="none" class="menu-item">
 				<view class="menu-item__left">
@@ -85,14 +91,19 @@
 				</view>
 				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 			</navigator>
-			<navigator url="/pages/my/setting/setting" hover-class="none">
-				<view class="menu-item">
-					<view class="menu-item__left">
-						<image class="menu-icon" src="/static/images/setting.png" mode="aspectFit"></image>
-						<text class="menu-text">设置</text>
-					</view>
-					<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+			<navigator url="/pages/my/download-records/download-records" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/download-records.png" mode="aspectFit"></image>
+					<text class="menu-text">下载记录</text>
 				</view>
+				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+			</navigator>
+			<navigator url="/pages/my/setting/setting" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/setting.png" mode="aspectFit"></image>
+					<text class="menu-text">设置</text>
+				</view>
+				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 			</navigator>
 			<view style="margin-top: 50rpx;">
 				<text class="copy">系统开发商：一颗优雅草科技-蜻蜓S系统（直播）</text>

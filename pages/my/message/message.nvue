@@ -1,0 +1,139 @@
+<template>
+	<view class="body">
+		<list class="list" @loadmore="_loadmore" loadmoreoffset="30">
+			<cell>
+				<view style="height: 32rpx;"></view>
+			</cell>
+			<cell v-for="(item, index) in list" :key="index">
+				<view class="item">
+					<image class="icon" :src="icons[item.type]" mode="" v-if="item.type === 1"></image>
+					<image class="icon" :src="item.avatar" mode="" v-else></image>
+					<view class="item-right">
+						<view class="item-right__content">
+							<text class="title" v-if="item.type === 1">粉丝</text>
+							<text class="title" v-else>互动消息</text>
+							<text class="content" v-if="item.type === 1">{{ item.nickname || item.username }} 关注了你</text>
+							<text class="content" v-if="item.type === 2">{{ item.nickname || item.username }}点赞了你的作品</text>
+							<text class="content" v-if="item.type === 3">{{ item.nickname || item.username }}评论了你的作品</text>
+							<text class="content" v-if="item.type === 4">{{ item.nickname || item.username }}@你</text>
+						</view>
+						<image class="right-arrow__icon" src="/static/images/right-arrow.png" mode=""></image>
+					</view>
+				</view>
+				<view class="line"></view>
+			</cell>
+			<cell>
+				<text class="tip" v-if="loading">加载中...</text>
+				<text class="tip" v-if="loadMore">加载更多中</text>
+				<text class="tip" v-if="noData && list.length === 0">暂无数据</text>
+				<text class="tip" v-if="noData && list.length > 10">没有更多了</text>
+			</cell>
+		</list>
+	</view>
+</template>
+
+<script>
+	import { MessageList } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {
+				list: [],
+				loading: false,
+				noData: false,
+				loadMore: false,
+				page: 1,
+				icons: {
+					1: '/static/images/fans.png',
+					2: '/static/images/hudong.png',
+					3: '/static/images/hudong.png',
+					4: '/static/images/hudong.png'
+				}
+			};
+		},
+		onShow() {
+			this._getMessageList()
+		},
+		methods: {
+			_loadmore() {
+				if (this.noData) return
+				this.page++
+				this.loadMore = true
+				this._getMessageList()
+			},
+			_getMessageList() {
+				this.loading = true
+				MessageList({
+					page: this.page,
+					limit: 10,
+					type: [1, 2, 3, 4]
+				}).then(({ code, data }) => {
+					if (code === 200) {
+						const { total_page, current_page, list } = data
+						if (current_page === 1) {
+							this.list = list
+						} else {
+							this.list = this.list.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.noData = true
+						}
+					}
+					this.loading = false
+					this.loadMore = false
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	.line {
+		margin: 0 0 32rpx 116rpx;
+		background-color: rgba($color: #999999, $alpha: 0.2);
+		height: 1rpx;
+	}
+	.content {
+		font-size: 28rpx;
+		color: #999999;
+		margin-top: 12rpx;
+	}
+	.item-right__content {
+		flex: 1;
+	}
+	.title {
+		font-size: 32rpx;
+		color: #FFFFFF;
+	}
+	.item-right {
+		flex: 1;
+		flex-direction: row;
+		align-items: center;
+	}
+	.right-arrow__icon {
+		width: 40rpx;
+		height: 40rpx;
+	}
+	.item {
+		flex-direction: row;
+		align-items: center;
+		margin: 0 24rpx 32rpx 24rpx;
+	}
+	.icon {
+		width: 92rpx;
+		height: 92rpx;
+		margin-right: 24rpx;
+		border-radius: 50%;
+	}
+	.tip {
+		text-align: center;
+		font-size: 24rpx;
+		color: #999999;
+	}
+	.list {
+		flex: 1;
+	}
+	.body {
+		flex: 1;
+	}
+</style>

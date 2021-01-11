@@ -1,14 +1,11 @@
 <template>
 	<view class="body">
-		<list class="list" @loadmore="_loadmore">
+		<list @loadmore="_loadmore">
 			<cell v-for="(item, index) in list" :key="index">
 				<view class="item">
-					<view class="cover-box">
-						<image class="cover" :src="item.video.thumb" mode="aspectFill"></image>
-						<view class="cover-foot">
-							<text class="title">{{ item.video.title }}</text>
-							<!-- <text class="views">{{ item.view_num }}</text> -->
-						</view>
+					<image class="item-bg" :src="item.thumb" mode="aspectFill"></image>
+					<view class="item-foot">
+						<text class="item-title">{{ item.title }}</text>
 					</view>
 				</view>
 			</cell>
@@ -29,35 +26,35 @@
 </template>
 
 <script>
-	import { PlayRecords } from '@/common/api.js'
+	import { DownloadRecords } from '@/common/api.js'
 	
 	export default {
 		data() {
 			return {
 				list: [],
-				page: 1,
 				loading: false,
+				init: true,
 				noData: false,
-				init: true
+				page: 1
 			};
 		},
 		onShow() {
-			this._getPlayRecords()
+			this._getDownloadRecords()
 		},
 		methods: {
 			_loadmore() {
 				if (this.noData) return
-				this.loading = true
 				this.page++
-				this._getPlayRecords()
+				this.loading = true
+				this._getDownloadRecords()
 			},
-			_getPlayRecords() {
-				PlayRecords({
+			_getDownloadRecords() {
+				DownloadRecords({
 					page: this.page,
 					limit: 10
 				}).then(({ code, data }) => {
 					if (code === 200) {
-						const { list, total_page, current_page } = data
+						const { total_page, current_page, list } = data
 						if (current_page === 1) {
 							this.list = list
 						} else {
@@ -66,9 +63,9 @@
 						if (total_page === 0 || current_page >= total_page) {
 							this.noData = true
 						}
+						this.loading = false
+						this.init = false
 					}
-					this.loading = false
-					this.init = false
 				})
 			}
 		}
@@ -76,42 +73,27 @@
 </script>
 
 <style lang="scss" scoped>
-	.views {
-		font-size: 32rpx;
+	.item-title {
+		font-size: 28rpx;
 		color: #FFFFFF;
-	}
-	.title {
-		flex: 1;
-		padding-right: 32rpx;
-		lines: 1;
+		lines: 2;
 		text-overflow: ellipsis;
-		color: #FFFFFF;
-		font-size: 32rpx;
 	}
-	.cover-foot {
+	.item-foot {
 		position: absolute;
 		bottom: 0;
 		left: 0;
 		right: 0;
-		height: 80rpx;
-		flex-direction: row;
-		align-items: center;
-		padding: 0 24rpx;
-		background-image: linear-gradient(to top, #000, transparent);
+		padding: 24rpx;
+		background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 	}
-	.cover {
+	.item-bg {
 		width: 750rpx;
 	}
 	.alert {
 		font-size: 24rpx;
-		color: #999999;
 		text-align: center;
-		padding: 32rpx 0;
-	}
-	.body {
-		flex: 1;
-	}
-	.list {
-		flex: 1;
+		padding: 24rpx;
+		color: #999999;
 	}
 </style>

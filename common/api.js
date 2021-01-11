@@ -209,3 +209,28 @@ export const PlayRecords = (data) => {
 export const Config = (data) => {
 	return post('config', data)
 }
+
+// 添加视频下载记录
+export const AddDownload = (vid) => {
+	return post('download', { vid })
+}
+
+// 下载记录
+export const DownloadRecords = (data) => {
+	return post('downloadList', data)
+}
+
+// 任务列表
+export const TaskList = () => {
+	return post('task/list')
+}
+
+// 任务领取
+export const TaskPickup = (data) => {
+	return post('task/receive', data)
+}
+
+// 消息列表
+export const MessageList = (data) => {
+	return post('message/getList', data)
+}

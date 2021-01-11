@@ -2,10 +2,8 @@
 	<view class="body" :style="{'height': `${windowHeight}px`}">
 		<list class="list" :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" :bounce="false" @scroll="onScroll">
 			<cell class="cell" v-for="(item, index) in videoList" :key="`cell_${index}`" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}">
-				<v-video 
-					v-if="index > (playIndex - 3) && (playIndex + 3) > index"
-					:src="item.video_url" :video="item" :index="index" :current="playIndex" :ref="`video_${index}`"
-					@play="onPlay" :style="{'height': `${windowHeight}px`, 'width': `${windowWidth}px`}"></v-video>
+				<v-video v-if="index > (playIndex - 3) && (playIndex + 3) > index" :src="item.video_url" :video="item" :index="index"
+				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :style="{'height': `${windowHeight}px`, 'width': `${windowWidth}px`}"></v-video>
 				<view class="bottom">
 					<view class="bottom-author">
 						<text class="bottom-author__text">@{{ item.nickname || item.username }}</text>
@@ -34,7 +32,7 @@
 						<image class="comment-icon" src="/static/images/comment.png" mode=""></image>
 						<text class="right-text">{{ item.comment_num.length > 3 ? item.comment_num_str : item.comment_num }}</text>
 					</view>
-					<view>
+					<view @tap="_openSharePopup(item)">
 						<image class="share-icon" src="/static/images/share.png" mode=""></image>
 						<text class="right-text">{{ item.share_num_str || 0 }}</text>
 					</view>
@@ -44,7 +42,8 @@
 		<uni-popup ref="popup" type="bottom" @change="_commentPopupChange">
 			<view class="comment-box" :style="{'height': `${windowHeight * 0.7}px`}">
 				<view class="comment-head">
-					<text class="comment-head__text">{{ video.comment_num.length > 3 ? video.comment_num_str : video.comment_num }} 条评论</text>
+					<text class="comment-head__text">{{ video.comment_num.length > 3 ? video.comment_num_str : video.comment_num }}
+						条评论</text>
 					<image class="comment-head__icon" src="/static/images/close.png" mode="" @tap="$refs.popup.close()"></image>
 				</view>
 				<view class="list-box">
@@ -61,8 +60,10 @@
 											</view>
 										</view>
 										<view class="comment-like">
-											<image class="comment-like__icon" src="/static/images/dianzan-red.png" mode="" @tap="_cancelCommentPraise(item)" v-if="item.is_like"></image>
-											<image class="comment-like__icon" src="/static/images/dianzan-white.png" mode="" @tap="_commentPraise(item)" v-else></image>
+											<image class="comment-like__icon" src="/static/images/dianzan-red.png" mode="" @tap="_cancelCommentPraise(item)"
+											 v-if="item.is_like"></image>
+											<image class="comment-like__icon" src="/static/images/dianzan-white.png" mode="" @tap="_commentPraise(item)"
+											 v-else></image>
 											<text class="comment-like__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 										</view>
 									</view>
@@ -85,20 +86,44 @@
 					</list>
 				</view>
 				<view class="comment-input__box">
-					<input class="comment-input" v-model="comment" type="text" placeholder="有爱评论,说点好听的～" :adjust-position="false" @confirm="_commentSubmit" />
+					<input class="comment-input" v-model="comment" type="text" placeholder="有爱评论,说点好听的～" :adjust-position="false"
+					 @confirm="_commentSubmit" />
 					<image class="comment-btn__icon" src="/static/images/send.png" mode="" @tap="_commentSubmit"></image>
 				</view>
+			</view>
+		</uni-popup>
+		<uni-popup ref="sharePopup" type="bottom" @change="_sharePopupChange">
+			<view class="share-box">
+				<view class="share-content">
+					<view class="share-item" v-for="(item, index) in shareList" :key="`share_${index}`" @tap="_onShare(item)">
+						<image class="share-item__icon" :src="item.icon" mode=""></image>
+						<text class="share-item__label">{{ item.label }}</text>
+					</view>
+				</view>
+				<view class="share-cancel" @tap="_closeSharePopup">取消</view>
 			</view>
 		</uni-popup>
 	</view>
 </template>
 
 <script>
-	import { mapGetters } from 'vuex'
+	import {
+		mapGetters
+	} from 'vuex'
 	import VVideo from '@/components/v-video/v-video'
-	import { VideoList, Praise, CancelPraise, Follow, Comment, CommentList, CommentPraise, CancelCommentPraise } from '@/common/api.js'
+	import {
+		VideoList,
+		Praise,
+		CancelPraise,
+		Follow,
+		Comment,
+		CommentList,
+		CommentPraise,
+		CancelCommentPraise,
+		AddDownload
+	} from '@/common/api.js'
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
-	
+
 	export default {
 		data() {
 			return {
@@ -117,7 +142,39 @@
 				commentList: [],
 				loading: false,
 				noData: false,
-				commentPage: 1
+				commentPage: 1,
+				shareList: [{
+						label: '微信',
+						icon: '/static/images/fenxiang1.png',
+						method: ''
+					},
+					{
+						label: '朋友圈',
+						icon: '/static/images/fenxiang2.png',
+						method: ''
+					},
+					{
+						label: 'QQ',
+						icon: '/static/images/fenxiang3.png',
+						method: ''
+					},
+					{
+						label: 'QQ空间',
+						icon: '/static/images/fenxiang4.png',
+						method: ''
+					},
+					{
+						label: '收藏',
+						icon: '/static/images/collection.png',
+						method: ''
+					},
+					{
+						label: '下载',
+						icon: '/static/images/download.png',
+						method: '_download'
+					}
+				],
+				progress: 0
 			};
 		},
 		components: {
@@ -139,8 +196,64 @@
 				default: []
 			}
 		},
-		components: { VVideo },
+		components: {
+			VVideo
+		},
 		methods: {
+			_openSharePopup(item) {
+				this.$refs.sharePopup.open()
+			},
+			_onShare(item) {
+				this.$refs.sharePopup.close()
+				switch (item.method) {
+					case '_download':
+						this._download()
+						break
+				}
+			},
+			_download() {
+				uni.showLoading({
+					title: '正在下载'
+				})
+				const downloadTask = uni.downloadFile({
+					url: this.video.video_url,
+					success: ({
+						tempFilePath,
+						statusCode
+					}) => {
+						if (statusCode === 200) {
+							uni.saveVideoToPhotosAlbum({
+								filePath: tempFilePath,
+								success: () => {
+									uni.showToast({
+										title: '下载成功',
+										icon: 'success'
+									})
+									AddDownload(this.video.id).then(res => {})
+								},
+								fail: (err) => {
+									uni.showToast({
+										title: '下载失败',
+										icon: 'none'
+									})
+								}
+							})
+						}
+					},
+					fail: (err) => {
+						uni.showLoading({
+							title: '正在下载'
+						})
+					}
+				})
+				
+				downloadTask.onProgressUpdate(({ progress }) => {
+					this.progress = progress
+				})
+			},
+			_closeSharePopup() {
+				this.$refs.sharePopup.close()
+			},
 			_reply(item) {
 				uni.navigateTo({
 					url: `/pages/reply/reply?item=${encodeURIComponent(JSON.stringify(item))}`
@@ -149,7 +262,10 @@
 			_cancelCommentPraise(item) {
 				CancelCommentPraise({
 					comment_id: item.id
-				}).then(({ code, msg }) => {
+				}).then(({
+					code,
+					msg
+				}) => {
 					uni.showToast({
 						title: msg,
 						icon: 'none'
@@ -163,7 +279,10 @@
 			_commentPraise(item) {
 				CommentPraise({
 					comment_id: item.id
-				}).then(({ code, msg }) => {
+				}).then(({
+					code,
+					msg
+				}) => {
 					uni.showToast({
 						title: msg,
 						icon: 'none'
@@ -183,7 +302,10 @@
 					type: 1,
 					vid: this.video.id,
 					content: this.comment
-				}).then(({ code, msg }) => {
+				}).then(({
+					code,
+					msg
+				}) => {
 					uni.hideKeyboard()
 					if (code === 200) {
 						this.comment = ''
@@ -209,10 +331,17 @@
 					vid,
 					page: this.commentPage,
 					limit: 10
-				}).then(({ code, data }) => {
+				}).then(({
+					code,
+					data
+				}) => {
 					if (code === 200) {
 						this.loading = true
-						const { total_page, current_page, list } = data
+						const {
+							total_page,
+							current_page,
+							list
+						} = data
 						if (current_page === 1) {
 							this.commentList = list
 						} else {
@@ -224,11 +353,16 @@
 					}
 				})
 			},
-			_commentPopupChange({ show }) {},
+			_commentPopupChange({
+				show
+			}) {},
 			_follow(item) {
 				Follow({
 					follow_id: item.user_id
-				}).then(({ code, msg }) => {
+				}).then(({
+					code,
+					msg
+				}) => {
 					uni.showToast({
 						title: msg,
 						icon: 'none'
@@ -242,7 +376,10 @@
 				Praise({
 					vid: item.id,
 					type: 1
-				}).then(({ code, msg }) => {
+				}).then(({
+					code,
+					msg
+				}) => {
 					uni.showToast({
 						title: msg,
 						icon: 'none'
@@ -259,7 +396,10 @@
 				CancelPraise({
 					vid: item.id,
 					type: 1
-				}).then(({ code, msg }) => {
+				}).then(({
+					code,
+					msg
+				}) => {
 					uni.showToast({
 						title: msg,
 						icon: 'none'
@@ -298,7 +438,10 @@
 				this.page++
 				VideoList({
 					page: this.page
-				}).then(({ data, code }) => {
+				}).then(({
+					data,
+					code
+				}) => {
 					if (code === 200) {
 						this.videoList = this.videoList.concat(data.list)
 					}
@@ -308,44 +451,91 @@
 		watch: {
 			list(val) {
 				this.videoList = val
+				this.video = this.videoList[this.playIndex]
 				this.init = true
+			},
+			playIndex(index) {
+				this.video = this.videoList[index]
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.share-item__label {
+		margin-top: 12rpx;
+		font-size: 28rpx;
+	}
+	
+	.share-item {
+		flex: 1;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.share-item__icon {
+		width: 80rpx;
+		height: 80rpx;
+	}
+	
+	.share-content {
+		padding: 20rpx;
+		flex-direction: row;
+		background-color: #FFFFFF;
+		border-radius: 12rpx;
+		margin-bottom: 24rpx;
+	}
+	
+	.share-cancel {
+		height: 88rpx;
+		background-color: #FFFFFF;
+		border-radius: 12rpx;
+		font-size: 34rpx;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.share-box {
+		padding: 24rpx 12rpx;
+	}
 	.comment-tip__text {
 		text-align: center;
 		color: #808080;
 		font-size: 24rpx;
 		margin-bottom: 32rpx;
 	}
+
 	.comment-foot {
 		flex-direction: row;
 		align-items: center;
 		margin-top: 12rpx;
 	}
+
 	.comment-item__time {
 		font-size: 24rpx;
 		color: #808080;
 		margin-right: 12rpx;
 	}
+
 	.comment-reply__text {
 		font-size: 24rpx;
 		color: #808080;
 	}
+
 	.comment-like {
 		align-items: center;
 	}
+
 	.comment-content {
 		flex: 1;
 		overflow: hidden;
 	}
+
 	.comment-item__left {
 		flex: 1;
 		margin-right: 32rpx;
 	}
+
 	.comment-content__text {
 		font-size: 32rpx;
 		line-height: 48rpx;
@@ -353,47 +543,57 @@
 		margin-top: 12rpx;
 		width: 486rpx;
 	}
+
 	.comment-item__head {
 		flex-direction: row;
 		justify-content: space-between;
 	}
+
 	.comment-like__text {
 		font-size: 24rpx;
 		color: #808080;
 		margin-top: 6rpx;
 		text-align: center;
 	}
+
 	.comment-like__icon {
 		width: 35rpx;
 		height: 35rpx;
 	}
+
 	.comment-item__username {
 		font-size: 28rpx;
 		color: #808080;
 	}
+
 	.comment-item__right {
 		flex: 1;
 	}
+
 	.comment-item {
 		margin: 0 24rpx 32rpx;
 		flex-direction: row;
 	}
+
 	.comment-item__avatar {
 		width: 80rpx;
 		height: 80rpx;
 		border-radius: 50rpx;
 		margin-right: 24rpx;
 	}
+
 	.comment-btn__icon {
 		width: 40rpx;
 		height: 40rpx;
 		margin-left: 24rpx;
 	}
+
 	.comment-input {
 		color: #FFFFFF;
 		font-size: 28rpx;
 		flex: 1;
 	}
+
 	.comment-input__box {
 		height: 80rpx;
 		background-color: #383A3F;
@@ -401,27 +601,33 @@
 		padding: 0 32rpx;
 		flex-direction: row;
 	}
+
 	.list-box {
 		flex: 1;
 	}
+
 	.comment-head__icon {
 		position: absolute;
 		right: 24rpx;
 		width: 30rpx;
 		height: 30rpx;
 	}
+
 	.comment-head__text {
 		text-align: center;
 		color: #FFFFFF;
 		font-size: 28rpx;
 	}
+
 	.comment-head {
 		height: 80rpx;
 		justify-content: center;
 	}
+
 	.comment-box {
 		background-color: #1F2124;
 	}
+
 	.avatar-container {
 		border-width: 1rpx;
 		border-color: #FFFFFF;
@@ -429,6 +635,7 @@
 		height: 86rpx;
 		border-radius: 50%;
 	}
+
 	.add-container {
 		position: absolute;
 		right: 0;
@@ -436,46 +643,55 @@
 		left: 0;
 		align-items: center;
 	}
+
 	.add-icon {
 		width: 35rpx;
 		height: 35rpx;
 	}
+
 	.add-box {
 		background-color: #FFFFFF;
 		border-radius: 50%;
 	}
+
 	.right-text {
 		color: #FFFFFF;
 		font-size: 28rpx;
 		text-align: center;
 	}
+
 	.avatar-box {
 		width: 86rpx;
 		height: 103.5rpx;
 		margin-bottom: 42rpx;
 		position: relative;
 	}
+
 	.mb-32 {
 		margin-bottom: 32rpx;
 	}
+
 	.share-icon {
 		width: 55rpx;
 		height: 55rpx;
 		opacity: 0.9;
 		margin-bottom: 12rpx;
 	}
+
 	.comment-icon {
 		width: 55rpx;
 		height: 55rpx;
 		opacity: 0.9;
 		margin-bottom: 12rpx;
 	}
+
 	.like-icon {
 		width: 55rpx;
 		height: 55rpx;
 		opacity: 0.9;
 		margin-bottom: 12rpx;
 	}
+
 	.right {
 		position: absolute;
 		right: 0;
@@ -484,14 +700,17 @@
 		align-items: center;
 		padding: 32rpx 32rpx 300rpx;
 	}
+
 	.avatar {
 		width: 85rpx;
 		height: 85rpx;
 		border-radius: 50%;
 	}
+
 	.bottom-author {
 		margin-bottom: 24rpx;
 	}
+
 	.bottom-title__text {
 		font-size: 28rpx;
 		line-height: 22px;
@@ -499,10 +718,12 @@
 		lines: 2;
 		text-overflow: ellipsis;
 	}
+
 	.bottom-author__text {
 		color: #FFFFFF;
 		font-size: 32rpx;
 	}
+
 	.bottom {
 		position: absolute;
 		right: 150rpx;
@@ -510,9 +731,11 @@
 		left: 0;
 		padding: 12rpx 24rpx;
 	}
+
 	.cell {
 		position: relative;
 	}
+
 	.list {
 		position: absolute;
 		top: 0;
@@ -520,6 +743,7 @@
 		bottom: 0;
 		left: 0;
 	}
+
 	.body {
 		background-color: #000000;
 	}
