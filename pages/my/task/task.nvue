@@ -7,9 +7,15 @@
 		<view class="task-box">
 			<text class="loading" v-if="loading">加载中...</text>
 			<view class="task-item" v-for="(item, index) in dailyTasks" :key="`dailyTasks_${index}`">
-				<text class="task-item__title">{{ item.title }}</text>
-				<view class="task-btn" @tap="_taskPickup(item)">
+				<view class="task-content">
+					<text class="task-item__title">{{ item.title }}({{ item.has_num }}/{{ item.need_num }})</text>
+					<text class="task-item__rewards">完成奖励：+{{ item.integral }}积分</text>
+				</view>
+				<view class="task-btn" @tap="_taskPickup(item)" v-if="item.can_receive">
 					<text class="task-btn__text">领取</text>
+				</view>
+				<view class="task-btn" v-if="item.is_receive">
+					<text class="task-btn__text">已领取</text>
 				</view>
 			</view>
 		</view>
@@ -55,6 +61,10 @@
 </script>
 
 <style lang="scss">
+	.task-item__rewards {
+		font-size: 28rpx;
+		color: #999999;
+	}
 	.loading {
 		font-size: 24rpx;
 		text-align: center;
@@ -74,12 +84,13 @@
 	.task-item__title {
 		font-size: 32rpx;
 		color: #333333;
+		margin-bottom: 6rpx;
 	}
 	.task-item {
-		height: 80rpx;
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;
+		margin-bottom: 24rpx;
 	}
 	.task-box {
 		margin: 0 24rpx;
