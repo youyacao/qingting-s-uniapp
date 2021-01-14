@@ -1,9 +1,9 @@
 {
     "name" : "蜻蜓S系统",
-    "appid" : "__UNI__64B56AC",
+    "appid" : "__UNI__FDAC1CB",
     "description" : "",
-    "versionName" : "1.8.2",
-    "versionCode" : 182,
+    "versionName" : "1.9.0",
+    "versionCode" : 190,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
