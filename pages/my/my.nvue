@@ -105,6 +105,14 @@
 				</view>
 				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
 			</navigator>
+			<navigator @click="Privacy()" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/setting.png" mode="aspectFit"></image>
+					<text class="menu-text">隐私政策</text>
+				</view>
+				<image class="right-arrow" src="/static/images/right-arrow.png" mode="aspectFit"></image>
+			</navigator>
+			
 			<view style="margin-top: 50rpx;">
 				<text class="copy">系统开发商：一颗优雅草科技-蜻蜓S系统（直播）</text>
 				<text class="copy">官网：songshu.youyacao.com</text>
@@ -286,3 +294,24 @@
 		margin-bottom: 50px;
 	}
 </style>
+
+
+<script>
+	
+	
+	export default {
+			methods: {
+				
+				
+				Privacy(){
+				plus.runtime.openURL('https://songshu.youyacao.com/detail/210.html');
+			},
+			
+			
+			}
+		
+		
+	}
+	
+	
+</script>
