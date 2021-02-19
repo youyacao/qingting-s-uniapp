@@ -3,10 +3,10 @@
 		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
-		// {
-		// 	"path": "pages/live/player/player",
-		// 	"style": {}
-		// },
+		{
+			"path": "pages/test/test",
+			"style": {}
+		},
 		{
 			"path": "pages/ad/ad",
 			"style": {}
@@ -326,6 +326,15 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "消息中心",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/test/test",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
             
