@@ -119,7 +119,13 @@
                     "isCloud" : true,
                     "bought" : 1,
                     "pid" : "3694",
-                    "parameters" : {}
+                    "parameters" : {
+                        "TuSDKAppid" : {
+                            "des" : "TuSDKAppid",
+                            "key" : "TuSDKAppid",
+                            "value" : ""
+                        }
+                    }
                 }
             }
         }
