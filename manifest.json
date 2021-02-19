@@ -92,6 +92,36 @@
                     }
                 }
             }
+        },
+        "nativePlugins" : {
+            "youyacao-MHTXLive" : {
+                "__plugin_info__" : {
+                    "name" : "美狐sdk官方伙伴发布-限时优惠美狐直播美颜sdk-直播美颜-特效直播-优雅草",
+                    "description" : "美狐美颜SDK实时美颜美化，打造自然美颜效果，包含美颜美型、大眼瘦脸、抖动特效、动态贴纸等核心功能",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=3800",
+                    "android_package_name" : "com.qingting.live",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "3800",
+                    "parameters" : {}
+                }
+            },
+            "youyacao-TuSDKEdit" : {
+                "__plugin_info__" : {
+                    "name" : "涂图官方合作伙伴-视频剪辑-视频美颜-视频拼接-视频特效sdk-优雅草科技",
+                    "description" : "一款让你直接可以使用涂图原生剪辑SDK的插件。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=3694",
+                    "android_package_name" : "com.qingting.live",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "3694",
+                    "parameters" : {}
+                }
+            }
         }
     },
     /* 快应用特有相关 */
