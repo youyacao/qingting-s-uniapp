@@ -31,7 +31,9 @@
 			</view>
 		</view>
 		<view class="protocols">
-			<checkbox value="accept" checked="true" style="transform:scale(0.7);" />
+			<checkbox-group @change="_checkedChange">
+				<checkbox value="accept" :checked="checked" style="transform:scale(0.7);" />
+			</checkbox-group>
 			<view class="protocols-text">已阅读并同意<navigator class="protocols-text__navigator" url="/pages/register/agreement/agreement" hover-class="none">《用户协议》</navigator></view>
 		</view>
 		<u-popup v-model="show" mode="center">
@@ -72,10 +74,18 @@
 				captcha: '',
 				password: '',
 				invitationCode: '',
-				type: 1
+				type: 1,
+				checked: true
 			};
 		},
 		methods: {
+			_checkedChange({ detail }) {
+				if (detail.value.length) {
+					this.checked = true
+				} else {
+					this.checked = false
+				}
+			},
 			_submit() {
 				if (!this.captcha) {
 					return this.$refs.uToast.show({
@@ -87,6 +97,12 @@
 					return this.$refs.uToast.show({
 						title: '请输入密码',
 						type: 'warning'
+					})
+				}
+				if (!this.checked) {
+					return uni.showToast({
+						title: '请同意用户使用协议',
+						icon: 'none'
 					})
 				}
 				Register({
@@ -341,7 +357,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 24rpx;
+		font-size: 28rpx;
 	}
 	.protocols-text {
 		display: flex;

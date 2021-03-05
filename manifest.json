@@ -18,7 +18,6 @@
         },
         /* 模块配置 */
         "modules" : {
-            "LivePusher" : {},
             "OAuth" : {},
             "VideoPlayer" : {}
         },
@@ -27,17 +26,13 @@
             /* android打包配置 */
             "android" : {
                 "permissions" : [
-                    "<uses-feature android:name=\"android.hardware.camera\"/>",
-                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
-                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
                     "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
                     "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
                     "<uses-permission android:name=\"android.permission.INSTALL_PACKAGES\"/>",
                     "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
@@ -45,7 +40,6 @@
                     "<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
                     "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
                     "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
                     "<uses-permission android:name=\"android.permission.REQUEST_INSTALL_PACKAGES\"/>",
                     "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
                     "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
@@ -94,20 +88,6 @@
             }
         },
         "nativePlugins" : {
-            "youyacao-MHTXLive" : {
-                "__plugin_info__" : {
-                    "name" : "美狐sdk官方伙伴发布-限时优惠美狐直播美颜sdk-直播美颜-特效直播-优雅草",
-                    "description" : "美狐美颜SDK实时美颜美化，打造自然美颜效果，包含美颜美型、大眼瘦脸、抖动特效、动态贴纸等核心功能",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=3800",
-                    "android_package_name" : "com.qingting.live",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "3800",
-                    "parameters" : {}
-                }
-            },
             "youyacao-TuSDKEdit" : {
                 "__plugin_info__" : {
                     "name" : "涂图官方合作伙伴-视频剪辑-视频美颜-视频拼接-视频特效sdk-优雅草科技",
@@ -123,6 +103,40 @@
                         "TuSDKAppid" : {
                             "des" : "TuSDKAppid",
                             "key" : "TuSDKAppid",
+                            "value" : ""
+                        }
+                    }
+                },
+                "TuSDKAppid" : "f64591d2151aa9b9-02-c2dws1"
+            },
+            "youyacao-MHTXLive" : {
+                "mhKey" : "5b430afb7f13e03f1bbe1c780434238d",
+                "ugcKey" : "99d2d356d0a86b65a65240228a518f27",
+                "ugcLicence" : "http://license.vod2.myqcloud.com/license/v1/02696e5bf2c67735d4ab26db1ffee39c/TXLiveSDK.licence",
+                "__plugin_info__" : {
+                    "name" : "美狐sdk官方伙伴发布-限时优惠美狐直播美颜sdk-直播美颜-特效直播-优雅草",
+                    "description" : "美狐美颜SDK实时美颜美化，打造自然美颜效果，包含美颜美型、大眼瘦脸、抖动特效、动态贴纸等核心功能",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=3800",
+                    "android_package_name" : "com.qingting.live",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "3800",
+                    "parameters" : {
+                        "mhKey" : {
+                            "des" : "mhKey",
+                            "key" : "mhKey",
+                            "value" : ""
+                        },
+                        "ugcKey" : {
+                            "des" : "ugcKey",
+                            "key" : "ugcKey",
+                            "value" : ""
+                        },
+                        "ugcLicence" : {
+                            "des" : "ugcLicence",
+                            "key" : "ugcLicence",
                             "value" : ""
                         }
                     }

@@ -1,0 +1,87 @@
+{  
+    "name": "TuSDKEdit",  
+    "id": "youyacao-TuSDKEdit",  
+    "version": "1.0",  
+    "description": "TuSDKEdit",  
+    "_dp_type":"nativeplugin",  
+    "_dp_nativeplugin":{ 
+		"ios": {
+		 "hooksClass":  "DCTuSDKEditProxy",
+		    "plugins": [  
+		        {  
+		          "type": "module",
+		          "name": "youyacao-TuSDKEdit",
+		            "class": "DCTuSDKEditModule"  
+		        }  
+		    ],  
+			  "assets":["image.xcassets"],	
+			"validArchitectures": [    // 可选，支持的CPU架构类型
+			                   "arm64"    //支持多个值，可取值：arm64 arm64e armv7 armv7s x86_64  
+			               ],
+						   "frameworks":[
+							   "libresolv.tbd",
+						   			  	"libyuv.framework",
+								"TuSDKFace.framework",
+								"TuSDKVideo.framework",
+								"TuSDK.framework"  
+						   							],
+			 "resources": [ 
+						 "TuSDK.bundle",
+					 "edit.bundle",
+					 "lsq_effect_thumb_LiveOldTV01.gif",
+					 "lsq_effect_thumb_LiveSoulOut01.gif",
+					 "lsq_effect_thumb_LiveMirrorImage01.gif",
+					 "lsq_effect_thumb_LiveSignal01.gif",
+					 "lsq_effect_thumb_reverse.gif",
+					 "lsq_effect_thumb_LiveFancy01_1.gif",
+					 "lsq_effect_thumb_LiveSlosh01.gif",
+					 "lsq_effect_thumb_repeat.gif",
+					 "lsq_effect_thumb_LiveLightning01.gif",
+					 "lsq_effect_thumb_LiveMegrim01.gif",
+					 "lsq_effect_thumb_LiveShake01.gif",
+					 "lsq_effect_thumb_EdgeMagic01.gif",
+					 "lsq_effect_thumb_LiveXRay01.gif",
+					 "lsq_effect_thumb_slow.gif",
+					 "lsq_effect_thumb_LiveHeartbeat01.gif",
+					 "TuSDKConstants.strings",
+					 "VideoDemo.strings"  
+				 ],
+				 "parameters":{
+				 				"TuSDKAppid":{
+				 					"des":"TuSDKAppid",
+				 					"key":"TuSDKAppid"
+				 				}
+				 			},
+		    "integrateType": "library"
+		},
+        "android": {    
+			  "hooksClass": "com.example.athree_TuSDKEdit.TuSDKEditHookProxy",
+            "plugins": [  
+                 {
+                          "type": "module",
+                          "name": "youyacao-TuSDKEdit",
+                          "class": "com.example.athree_TuSDKEdit.TuSDKEditWXModule"
+                        }
+            ],    
+            "integrateType": "aar" ,
+			 "abis": [
+			                "armeabi-v7a"
+			            ],
+	     "minSdkVersion": "21",
+			"parameters":{
+							"TuSDKAppid":{
+								"des":"TuSDKAppid",
+								"key":"TuSDKAppid"
+							}
+						},
+			"dependencies": [
+				"com.github.jakob-grabner:Circle-Progress-View:1.3",
+				"com.android.support:design:27.1.0",
+				"com.makeramen:roundedimageview:2.3.0",
+				"com.android.support.constraint:constraint-layout:1.1.3"
+						    ]
+						
+			 
+        } 
+    }  
+}

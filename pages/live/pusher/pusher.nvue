@@ -1,7 +1,7 @@
 <template>
 	<view class="body" :style="{'height': `${windowHeight}px`}">
-		<live-pusher :style="{'height': `${windowHeight}px`}" id='livePusher' ref="livePusher" class="livePusher" :url="url" :mode="modeList[pusherMode]" :muted="true" :enable-camera="true"
-		 :auto-focus="true" :beauty="1" whiteness="2" aspect="9:16" @statechange="statechange" @netstatus="netstatus" @error="error"></live-pusher>
+		<!-- <live-pusher :style="{'height': `${windowHeight}px`}" id='livePusher' ref="livePusher" class="livePusher" :url="url" :mode="modeList[pusherMode]" :muted="true" :enable-camera="true"
+		 :auto-focus="true" :beauty="1" whiteness="2" aspect="9:16" @statechange="statechange" @netstatus="netstatus" @error="error"></live-pusher> -->
 		<!-- <view class="btn-list">
 			<button class="btn" @tap="start">{{ status ? '正在推流' : '开始推流' }}</button>
 			<button class="btn" @tap="pause">暂停推流</button>
@@ -27,7 +27,7 @@
 					<image class="play-icon" src="/static/images/play-circle-fill.png" mode="" @tap="start" v-else></image>
 				</view>
 			</view>
-			<view class="btn-item" @tap="_alert">
+			<view class="btn-item" @tap="_beauty">
 				<image class="btn-item__icon" src="/static/images/meihua.png" mode=""></image>
 				<text class="btn-item__text">美化</text>
 			</view>
@@ -36,11 +36,15 @@
 				<text class="btn-item__text">录制</text>
 			</view>
 		</view>
+		<view :style="{ width: windowWidth, height: windowHeight }" class="devices">
+		    <MHTXLive id="mainMap" :style="{ width: windowWidth, height: windowHeight }" ref="MHTXlive"></MHTXLive>
+		</view>
 	</view>
 </template>
 
 <script>
 	const modal = weex.requireModule('modal')
+	const globalEvent = weex.requireModule('globalEvent')
 	import { mapGetters, mapState } from 'vuex'
 	import { StartLive } from '@/common/api.js'
 	
@@ -64,10 +68,25 @@
 			this.url = options.url
 		},
 		computed: {
-			...mapGetters(['windowHeight', 'statusBarHeight']),
+			...mapGetters(['windowHeight', 'windowWidth', 'statusBarHeight']),
 			...mapState(['pusherMode'])
 		},
 		methods: {
+			_beauty() {
+				const Live = this.$refs.MHTXlive
+				Live.Meiyan(result => {
+				const msg = JSON.stringify(result);
+					  // JSONObject result = new JSONObject();
+					  //               result.put("type",   "ViewHide" );
+					  //               result.put("code",   0 );
+					  //               result.put("msg",   "视图隐藏" );
+
+							  // params.put("type",   "ViewShow");
+							  // params.put("code",   0 );
+							  // params.put("msg",   "视图显示" );
+					 console.log(result);
+				 })
+			},
 			_alert() {
 				modal.alert({
 				  message: '敬请期待',

@@ -4,7 +4,7 @@
 	},
 	"pages": [
 		{
-			"path": "pages/test/test",
+			"path": "pages/live/pusher/pusher",
 			"style": {}
 		},
 		{

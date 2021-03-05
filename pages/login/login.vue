@@ -19,6 +19,12 @@
 					<navigator url="/pages/register/register" hover-class="none">立即注册</navigator>
 				</view>
 			</view>
+			<view class="protocols">
+				<checkbox-group @change="_checkedChange">
+					<checkbox value="accept" :checked="checked" style="transform:scale(0.7);" />
+				</checkbox-group>
+				<view class="protocols-text">已阅读并同意<navigator class="protocols-text__navigator" url="/pages/register/agreement/agreement" hover-class="none">《用户协议》</navigator></view>
+			</view>
 		</view>
 		<view class="login-other__contaimer">
 			<view class="login-other__title">
@@ -44,11 +50,19 @@
 			return {
 				username: '',
 				password: '',
-				loading: false
+				loading: false,
+				checked: true
 			};
 		},
 		methods: {
 			...mapActions(['updateUserinfo']),
+			_checkedChange({ detail }) {
+				if (detail.value.length) {
+					this.checked = true
+				} else {
+					this.checked = false
+				}
+			},
 			_login() {
 				if (!this.username) {
 					return uni.showToast({
@@ -59,6 +73,12 @@
 				if (!this.password) {
 					return uni.showToast({
 						title: '请输入密码',
+						icon: 'none'
+					})
+				}
+				if (!this.checked) {
+					return uni.showToast({
+						title: '请同意用户使用协议',
 						icon: 'none'
 					})
 				}
@@ -89,6 +109,19 @@
 </script>
 
 <style lang="scss" scoped>
+	.protocols {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 28rpx;
+	}
+	.protocols-text {
+		display: flex;
+		align-items: center;
+	}
+	.protocols-text__navigator {
+		color: #08d9d6;
+	}
 	.form-item__icon {
 		width: 32rpx;
 		height: 32rpx;
