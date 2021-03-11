@@ -31,7 +31,7 @@
 				<image class="btn-item__icon" src="/static/images/meihua.png" mode=""></image>
 				<text class="btn-item__text">美化</text>
 			</view>
-			<view class="btn-item" @tap="_alert">
+			<view class="btn-item" @tap="chooseVideo">
 				<image class="btn-item__icon" src="/static/images/luzhi.png" mode=""></image>
 				<text class="btn-item__text">录制</text>
 			</view>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+	const TuSDKEdit = uni.requireNativePlugin('youyacao-TuSDKEdit')
 	const modal = weex.requireModule('modal')
 	const globalEvent = weex.requireModule('globalEvent')
 	import { mapGetters, mapState } from 'vuex'
@@ -58,7 +59,7 @@
 			};
 		},
 		onReady() {
-			this.context = uni.createLivePusherContext("livePusher", this)
+			// this.context = uni.createLivePusherContext("livePusher", this)
 			if (this.context) {
 				this.startPreview()
 			}
@@ -72,6 +73,24 @@
 			...mapState(['pusherMode'])
 		},
 		methods: {
+			chooseVideo() {
+				uni.chooseVideo({
+					count: 1,
+					sourceType: ['camera', 'album'],
+					success: (res) => {
+						console.log(TuSDKEdit)
+						TuSDKEdit.edit({
+							list: [res.tempFilePath]
+						}, result => {
+							const msg = JSON.stringify(result);
+							uni.showModal({
+								content: msg,
+								showCancel: false
+							});
+						});
+					}
+				})
+			},
 			_beauty() {
 				const Live = this.$refs.MHTXlive
 				Live.Meiyan(result => {
