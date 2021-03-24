@@ -23,9 +23,10 @@
 			</view>
 			<view class="btn-item">
 				<view class="btn-item__play">
-					<image class="play-icon" src="/static/images/poweroff-circle-fill.png" mode="aspectFit" @tap="StopPush"
-						v-if="status"></image>
-					<image class="play-icon" src="/static/images/play-circle-fill.png" mode="aspectFit" @tap="StartPush" v-else>
+					<image class="play-icon" src="/static/images/poweroff-circle-fill.png" mode="aspectFit"
+						@tap="StopPush" v-if="status"></image>
+					<image class="play-icon" src="/static/images/play-circle-fill.png" mode="aspectFit" @tap="StartPush"
+						v-else>
 					</image>
 				</view>
 			</view>
@@ -86,25 +87,27 @@
 		},
 		methods: {
 			_moreMenu() {
-			        picker.pick({
-			          items: ['贴纸', '特效', '哈哈镜', '视频编辑测试']
-			        }, event => {
-			          if (event.result === 'success') {
-						  switch(event.data) {
-								case 0:
-									this.Tiezhi()
-									break
-								case 1:
-									this.Texiao()
-									break
-								case 2:
-									this.Hahajing()
-								default:
-									this.chooseVideo()
-						  }
-					  }
-			        })
-			      },
+				picker.pick({
+					items: ['贴纸', '特效', '哈哈镜', '视频编辑测试']
+				}, event => {
+					console.log(event)
+					if (event.result === 'success') {
+						switch (event.data) {
+							case 0:
+								this.Tiezhi()
+								break
+							case 1:
+								this.Texiao()
+								break
+							case 2:
+								this.Hahajing()
+								break
+							default:
+								this.chooseVideo()
+						}
+					}
+				})
+			},
 			chooseVideo() {
 				uni.chooseVideo({
 					count: 9,
