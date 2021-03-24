@@ -3,10 +3,10 @@
 		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
-		{
-			"path": "pages/live/pusher/pusher",
-			"style": {}
-		},
+		// {
+		// 	"path": "pages/live/pusher/pusher",
+		// 	"style": {}
+		// },
 		{
 			"path": "pages/ad/ad",
 			"style": {}

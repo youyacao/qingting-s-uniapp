@@ -1,0 +1,35 @@
+{  
+    "name": "TuSDKEdit",  
+    "id": "youyacao-TuSDKEdit",  
+    "version": "1.0",  
+    "description": "TuSDKEdit",  
+    "_dp_type":"nativeplugin",  
+    "_dp_nativeplugin":{ 
+		"ios": {
+		    "plugins": [  
+		        {  
+		          "type": "module",
+		          "name": "youyacao-TuSDKEdit",
+		            "class": "DCTuSDKEditModule"  
+		        }  
+		    ],
+			 "resources": [ 
+						 "TuSDK.bundle"
+        
+				 ],
+		    "integrateType": "library"
+		},
+        "android": {
+            "plugins": [  
+                 {
+                          "type": "module",
+                          "name": "youyacao-TuSDKEdit",
+                          "class": "com.example.athree_TuSDKEdit.TuSDKEditWXModule"
+                        }
+            ],    
+            "integrateType": "aar"
+						
+			 
+        } 
+    }  
+}

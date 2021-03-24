@@ -12,50 +12,62 @@
 			<button class="btn" @click="startPreview">开启摄像头预览</button>
 			<button class="btn" @click="stopPreview">关闭摄像头预览</button>
 		</view> -->
-		<view class="btn-box">
+		<view class="btn-box" v-if="show">
 			<view class="btn-item" @tap="_back">
-				<image class="btn-item__icon" src="/static/images/fanhui.png" mode=""></image>
+				<image class="btn-item__icon" src="/static/images/fanhui.png" mode="aspectFit"></image>
 				<text class="btn-item__text">返回</text>
 			</view>
-			<view class="btn-item" @tap="switchCamera">
-				<image class="btn-item__icon" src="/static/images/fanzhuan.png" mode=""></image>
+			<view class="btn-item" @tap="SwitchCamera">
+				<image class="btn-item__icon" src="/static/images/fanzhuan.png" mode="aspectFit"></image>
 				<text class="btn-item__text">翻转</text>
 			</view>
 			<view class="btn-item">
 				<view class="btn-item__play">
-					<image class="play-icon" src="/static/images/poweroff-circle-fill.png" mode="" @tap="pause" v-if="status"></image>
-					<image class="play-icon" src="/static/images/play-circle-fill.png" mode="" @tap="start" v-else></image>
+					<image class="play-icon" src="/static/images/poweroff-circle-fill.png" mode="aspectFit" @tap="StopPush"
+						v-if="status"></image>
+					<image class="play-icon" src="/static/images/play-circle-fill.png" mode="aspectFit" @tap="StartPush" v-else>
+					</image>
 				</view>
 			</view>
 			<view class="btn-item" @tap="_beauty">
-				<image class="btn-item__icon" src="/static/images/meihua.png" mode=""></image>
-				<text class="btn-item__text">美化</text>
+				<image class="btn-item__icon" src="/static/images/meihua.png" mode="aspectFit"></image>
+				<text class="btn-item__text">美颜</text>
 			</view>
-			<view class="btn-item" @tap="chooseVideo">
-				<image class="btn-item__icon" src="/static/images/luzhi.png" mode=""></image>
-				<text class="btn-item__text">录制</text>
+			<view class="btn-item" @tap="_moreMenu">
+				<image class="btn-item__icon" src="/static/images/gengduo1.png" mode="aspectFit"></image>
+				<text class="btn-item__text">更多</text>
 			</view>
 		</view>
 		<view :style="{ width: windowWidth, height: windowHeight }" class="devices">
-		    <MHTXLive id="mainMap" :style="{ width: windowWidth, height: windowHeight }" ref="MHTXlive"></MHTXLive>
+			<youyacao-MHTXLive id="mainMap" :style="{ width: windowWidth, height: windowHeight }" ref="myMHLive">
+			</youyacao-MHTXLive>
 		</view>
 	</view>
 </template>
 
 <script>
+	const TuSDKImageEdit = uni.requireNativePlugin('youyacao-TuSDKImageEdit')
 	const TuSDKEdit = uni.requireNativePlugin('youyacao-TuSDKEdit')
 	const modal = weex.requireModule('modal')
+	const picker = weex.requireModule('picker')
 	const globalEvent = weex.requireModule('globalEvent')
-	import { mapGetters, mapState } from 'vuex'
-	import { StartLive } from '@/common/api.js'
-	
+	import {
+		mapGetters,
+		mapState
+	} from 'vuex'
+	import {
+		StartLive
+	} from '@/common/api.js'
+
 	export default {
 		data() {
 			return {
 				url: '',
 				context: null,
 				status: false,
-				modeList: ['SD', 'HD', 'FHD']
+				modeList: ['SD', 'HD', 'FHD'],
+				show: true,
+				Live: null
 			};
 		},
 		onReady() {
@@ -65,7 +77,7 @@
 			}
 		},
 		onLoad(options) {
-			// this._startLive()
+			this._startLive()
 			this.url = options.url
 		},
 		computed: {
@@ -73,9 +85,29 @@
 			...mapState(['pusherMode'])
 		},
 		methods: {
+			_moreMenu() {
+			        picker.pick({
+			          items: ['贴纸', '特效', '哈哈镜', '视频编辑测试']
+			        }, event => {
+			          if (event.result === 'success') {
+						  switch(event.data) {
+								case 0:
+									this.Tiezhi()
+									break
+								case 1:
+									this.Texiao()
+									break
+								case 2:
+									this.Hahajing()
+								default:
+									this.chooseVideo()
+						  }
+					  }
+			        })
+			      },
 			chooseVideo() {
 				uni.chooseVideo({
-					count: 1,
+					count: 9,
 					sourceType: ['camera', 'album'],
 					success: (res) => {
 						console.log(TuSDKEdit)
@@ -92,35 +124,93 @@
 				})
 			},
 			_beauty() {
-				const Live = this.$refs.MHTXlive
-				Live.Meiyan(result => {
-				const msg = JSON.stringify(result);
-					  // JSONObject result = new JSONObject();
-					  //               result.put("type",   "ViewHide" );
-					  //               result.put("code",   0 );
-					  //               result.put("msg",   "视图隐藏" );
-
-							  // params.put("type",   "ViewShow");
-							  // params.put("code",   0 );
-							  // params.put("msg",   "视图显示" );
-					 console.log(result);
-				 })
+				this.show = false
+				this.Live = this.$refs.myMHLive
+				this.Live.Meiyan(result => {
+					const msg = JSON.stringify(result);
+					const {
+						type
+					} = result
+					if (type === 'ViewHide') {
+						this.show = true
+					}
+				})
+			},
+			Texiao() {
+				this.show = false
+				const Live = this.$refs.myMHLive
+				Live.Texiao(result => {
+					// {
+					// 	"type": "ViewShow",
+					// 	"code": 0,
+					// 	"msg": "视图显示"
+					// }
+					if (result.type === 'ViewHide') {
+						this.show = true
+					}
+				})
+			},
+			Hahajing() {
+				this.show = false
+				const Live = this.$refs.myMHLive
+				Live.Hahajing(result => {
+					if (result.type === 'ViewHide') {
+						this.show = true
+					}
+				})
+			},
+			Tiezhi() {
+				this.show = false
+				const Live = this.$refs.myMHLive
+				Live.Tiezhi(result => {
+					if (result.type === 'ViewHide') {
+						this.show = true
+					}
+				})
+			},
+			SwitchCamera() {
+				const Live = this.$refs.myMHLive
+				Live.SwitchCamera()
+			},
+			StartPush() {
+				const Live = this.$refs.myMHLive
+				Live.StartPush({
+					URL: this.url
+				}, res => {
+					if (res.type === 'StartPush') {
+						this.status = true
+					}
+				});
+			},
+			StopPush() {
+				const Live = this.$refs.myMHLive
+				Live.StopPush(result => {
+					// {
+					// 	"type": "StopPush",
+					// 	"code": 0,
+					// 	"msg": "停止推流"
+					// }
+					if (result.type === 'StopPush') {
+						this.status = false
+					}
+				})
 			},
 			_alert() {
 				modal.alert({
-				  message: '敬请期待',
-				  okTitle: '确认'
-				}, function () {
-				  console.log('alert callback')
+					message: '敬请期待',
+					okTitle: '确认'
+				}, function() {
+					console.log('alert callback')
 				})
 			},
 			_back() {
 				modal.confirm({
-				    message: '返回将自动结束推流，是否返回?',
+					message: '返回将自动结束推流，是否返回?',
 					okTitle: '确定',
 					cancelTitle: '取消'
-				}, function (value) {
+				}, function(value) {
 					if (value === '确定') {
+						this.$refs.myMHLive.backbutton()
 						uni.navigateBack({
 							delta: 2
 						})
@@ -128,10 +218,14 @@
 				})
 			},
 			_startLive() {
-				StartLive().then(({ code, data }) => {
-					const { rtmp_push_url } = data
+				StartLive().then(({
+					code,
+					data
+				}) => {
+					const {
+						rtmp_push_url
+					} = data
 					this.url = rtmp_push_url
-					console.log(data)
 				})
 			},
 			statechange(e) {
@@ -228,10 +322,12 @@
 		color: #FFFFFF;
 		text-align: center;
 	}
+
 	.btn-item__icon {
 		width: 50rpx;
 		height: 50rpx;
 	}
+
 	.btn-item__play {
 		width: 115rpx;
 		height: 115rpx;
@@ -241,15 +337,18 @@
 		align-items: center;
 		justify-content: center;
 	}
+
 	.play-icon {
 		width: 100rpx;
 		height: 100rpx;
 	}
+
 	.btn-item {
 		flex: 1;
 		align-items: center;
 		justify-content: center;
 	}
+
 	.btn-box {
 		position: fixed;
 		bottom: 0;
@@ -259,12 +358,14 @@
 		flex-direction: row;
 		align-items: center;
 	}
+
 	.btn-list {
 		position: absolute;
 		right: 0;
 		bottom: 0;
 		left: 0;
 	}
+
 	.livePusher {
 		width: 750rpx;
 		position: absolute;

@@ -234,3 +234,8 @@ export const TaskPickup = (data) => {
 export const MessageList = (data) => {
 	return post('message/getList', data)
 }
+
+// 卡密兑换
+export const CardSecretExchange = (data) => {
+	return post('cipher/receive', data)
+}

@@ -1,0 +1,32 @@
+{  
+    "name": "TuSDKImageEdit",  
+    "id": "youyacao-TuSDKImageEdit",  
+    "version": "1.0",  
+    "description": "TuSDKImageEdit",  
+    "_dp_type":"nativeplugin",  
+    "_dp_nativeplugin":{
+		"ios":{
+			   "plugins": [  
+			       {  
+			         "type": "module",
+			         "name": "youyacao-TuSDKImageEdit",
+			           "class": "DCTuSDKImageEditModule"  
+			       }  
+			   ],
+			    "resources": [ 
+			   			 "TuSDK.bundle"
+			   	 ],
+			   "integrateType": "library"
+		},
+        "android": {
+            "plugins": [   
+                 {
+                          "type": "module",
+                          "name": "youyacao-TuSDKImageEdit",
+                          "class": "com.example.athree_TuSDKImageEdit.TuSDKImageEditWXModule"
+                        }
+            ],    
+            "integrateType": "aar"
+        } 
+    }  
+}
