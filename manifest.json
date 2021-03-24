@@ -48,7 +48,9 @@
                 ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "idfa" : false
+            },
             /* SDK配置 */
             "sdkConfigs" : {
                 "oauth" : {},
