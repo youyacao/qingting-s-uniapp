@@ -181,6 +181,10 @@
 					URL: this.url
 				}, res => {
 					if (res.type === 'StartPush') {
+						uni.showToast({
+							title: '推流成功',
+							icon: 'none'
+						})
 						this.status = true
 					}
 				});
@@ -194,6 +198,10 @@
 					// 	"msg": "停止推流"
 					// }
 					if (result.type === 'StopPush') {
+						uni.showToast({
+							title: '已暂停推流',
+							icon: 'none'
+						})
 						this.status = false
 					}
 				})
