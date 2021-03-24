@@ -67,6 +67,9 @@
 				})
 			},
 			_pusher() {
+				// uni.navigateTo({
+				// 	url: '/pages/live/pusher/pusher'
+				// })
 				uni.navigateTo({
 					url: '/pages/live/create/create'
 				})

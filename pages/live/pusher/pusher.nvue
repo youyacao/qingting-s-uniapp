@@ -219,7 +219,7 @@
 					message: '返回将自动结束推流，是否返回?',
 					okTitle: '确定',
 					cancelTitle: '取消'
-				}, function(value) {
+				}, value => {
 					if (value === '确定') {
 						this.$refs.myMHLive.backbutton()
 						uni.navigateBack({

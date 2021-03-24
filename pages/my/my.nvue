@@ -4,32 +4,32 @@
 			<view :style="{'height': `${statusBarHeight}px`}"></view>
 			<view class="user-container">
 				<view class="avatar-box">
-					<image class="avatar" :src="userinfo.avatar" mode=""></image>
-					<image class="vip" src="/static/images/vip.png" mode="" v-if="userinfo.is_vip"></image>
+					<image class="avatar" :src="userinfo && userinfo.avatar" mode=""></image>
+					<image class="vip" src="/static/images/vip.png" mode="" v-if="userinfo && userinfo.is_vip"></image>
 				</view>
 				<view>
-					<text class="nickname">{{ userinfo.nickname || '未设置' }}</text>
-					<text class="id">ID: {{ userinfo.username }}</text>
-					<text class="desc">{{ userinfo.desc || '这个人很懒，什么也没有留下' }}</text>
+					<text class="nickname">{{ userinfo && userinfo.nickname || '未设置' }}</text>
+					<text class="id">ID: {{ userinfo && userinfo.username }}</text>
+					<text class="desc">{{ userinfo && userinfo.desc || '这个人很懒，什么也没有留下' }}</text>
 				</view>
 			</view>
 		</view>
 		<view class="head">
 			<view class="head-box">
 				<view class="head-item" @tap="_toFans('/pages/my/fans/fans?current=1')">
-					<text class="head-item__value">{{ userinfo.follow_num || 0 }}</text>
+					<text class="head-item__value">{{ userinfo && userinfo.follow_num || 0 }}</text>
 					<text class="head-item__label">粉丝</text>
 				</view>
 				<view class="head-item" @tap="_toFans('/pages/my/fans/fans?current=0')">
-					<text class="head-item__value">{{ userinfo.my_follow_num || 0 }}</text>
+					<text class="head-item__value">{{ userinfo && userinfo.my_follow_num || 0 }}</text>
 					<text class="head-item__label">关注</text>
 				</view>
 				<view class="head-item">
-					<text class="head-item__value">{{ userinfo.like_num || 0 }}</text>
+					<text class="head-item__value">{{ userinfo && userinfo.like_num || 0 }}</text>
 					<text class="head-item__label">获赞</text>
 				</view>
 				<view class="head-item" @tap="_toPromotion">
-					<text class="head-item__value">{{ userinfo.ref_num || 0 }}</text>
+					<text class="head-item__value">{{ userinfo && userinfo.ref_num || 0 }}</text>
 					<text class="head-item__label">推广</text>
 				</view>
 			</view>
@@ -141,11 +141,8 @@
 			...mapState(['userinfo']),
 			...mapGetters(['statusBarHeight'])
 		},
-		onShow() {
-			this.updateUserinfo()
-			console.log(this.userinfo)
-		},
 		onLoad() {
+			this.updateUserinfo()
 			uni.hideTabBar()
 		},
 		methods: {
