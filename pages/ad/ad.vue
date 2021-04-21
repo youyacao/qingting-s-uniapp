@@ -1,6 +1,6 @@
 <template>
 	<view class="body" @tap="_tap">
-		<image class="ad" :src="ad.img_url" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight - 0}px`}"></image>
+		<image class="ad" :src="ad.img_url" mode="scaleToFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight - 0}px`}"></image>
 		<view class="countdown" @tap="_skip" v-if="ad.img_url">
 			<text>{{ countdown }}s｜跳过</text>
 		</view>
