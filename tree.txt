@@ -1,0 +1,130 @@
+.
+|-- App.vue
+|-- README.en.md
+|-- README.md
+|-- common
+|   |-- APPUpdate.js
+|   |-- api.js
+|   |-- common.js
+|   |-- config.js
+|   |-- crypto-js.js
+|   |-- request.js
+|   `-- test.js
+|-- components
+|   |-- uni-popup
+|   |   |-- message.js
+|   |   |-- popup.js
+|   |   |-- uni-popup-dialog.vue
+|   |   |-- uni-popup-message.vue
+|   |   |-- uni-popup-share.vue
+|   |   `-- uni-popup.vue
+|   |-- uni-transition
+|   |   `-- uni-transition.vue
+|   |-- v-player
+|   |   `-- v-player.vue
+|   |-- v-slider
+|   |   `-- v-slider.vue
+|   |-- v-tabbar
+|   |   `-- v-tabbar.nvue
+|   `-- v-video
+|       `-- v-video.vue
+|-- js_sdk
+|   |-- luch-request
+|   |   `-- luch-request
+|   |       |-- adapters
+|   |       |   `-- index.js
+|   |       |-- core
+|   |       |   |-- InterceptorManager.js
+|   |       |   |-- Request.js
+|   |       |   |-- buildFullPath.js
+|   |       |   |-- defaults.js
+|   |       |   |-- dispatchRequest.js
+|   |       |   |-- mergeConfig.js
+|   |       |   `-- settle.js
+|   |       |-- helpers
+|   |       |   |-- buildURL.js
+|   |       |   |-- combineURLs.js
+|   |       |   `-- isAbsoluteURL.js
+|   |       |-- index.js
+|   |       `-- utils.js
+|   |-- wa-permission
+|   |   `-- permission.js
+|   `-- zhouWei-APPUpdate
+|       `-- APPUpdate
+|           |-- APPUpdate.md
+|           `-- index.js
+|-- main.js
+|-- manifest.json
+|-- nativeplugins
+|   |-- youyacao-TuSDKEdit
+|   |   `-- package.json
+|   `-- youyacao-TuSDKImageEdit
+|       `-- package.json
+|-- package-lock.json
+|-- package.json
+|-- pages
+|   |-- ad
+|   |   `-- ad.vue
+|   |-- home
+|   |   `-- home.nvue
+|   |-- live
+|   |   |-- create
+|   |   |   `-- create.vue
+|   |   |-- live.nvue
+|   |   |-- player
+|   |   |   `-- player.nvue
+|   |   |-- pusher
+|   |   |   `-- pusher.nvue
+|   |   `-- record
+|   |       `-- record.nvue
+|   |-- login
+|   |   `-- login.vue
+|   |-- message
+|   |   |-- message.nvue
+|   |   `-- post
+|   |       `-- post.vue
+|   |-- my
+|   |   |-- article-list
+|   |   |   `-- article-list.nvue
+|   |   |-- download-records
+|   |   |   `-- download-records.nvue
+|   |   |-- fans
+|   |   |   `-- fans.nvue
+|   |   |-- like
+|   |   |   `-- like.nvue
+|   |   |-- like-message
+|   |   |   `-- like-message.nvue
+|   |   |-- like-video
+|   |   |   `-- like-video.nvue
+|   |   |-- message
+|   |   |   `-- message.nvue
+|   |   |-- my.nvue
+|   |   |-- play-records
+|   |   |   `-- play-records.nvue
+|   |   |-- promotion-record
+|   |   |   `-- promotion-record.nvue
+|   |   |-- setting
+|   |   |   `-- setting.vue
+|   |   |-- task
+|   |   |   `-- task.nvue
+|   |   `-- video-list
+|   |       `-- video-list.nvue
+|   |-- publish
+|   |   `-- publish.vue
+|   |-- register
+|   |   |-- agreement
+|   |   |   `-- agreement.vue
+|   |   `-- register.vue
+|   |-- reply
+|   |   `-- reply.nvue
+|   |-- test
+|   |   `-- test.vue
+|   `-- upload-video
+|       `-- upload-video.vue
+|-- pages.json
+|-- qingting-uni.keystore
+|-- tree.txt
+|-- uni.scss
+`-- yarn.lock
+
+50 directories, 77 files
