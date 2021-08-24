@@ -14,27 +14,47 @@ node.js +springboot2.2+springmvc+druid+mybatis+mangoDB+mysql+shiro-redis+redis+a
  其他版本请关注松鼠/蜻蜓系统管网 
 
 [松鼠短视频](https://songshu.youyacao.com/video.html)
-[蜻蜓系统](https://qingting.youyacao.com/video.html)
-
-
-#### 蜻蜓系统完整搭建关联仓库
-[蜻蜓服务端qingting-api](https://gitee.com/youyacao/qingting-api)
-[蜻蜓后台管理端qingting-admmin](https://gitee.com/youyacao/qingting-admin)
+[蜻蜓系统](https://songshu.youyacao.com/qingting.html)
 
 #### 安装教程
 
 [蜻蜓系统整体安装教程](https://doc.youyacao.com/web/#/8?page_id=51)
 
 
+### 蜻蜓系统关联仓库
+
+#### PHP后端
+
+[蜻蜓服务端qingting-api](https://gitee.com/youyacao/qingting-api)
+[蜻蜓后台管理端qingting-admmin](https://gitee.com/youyacao/qingting-admin)
+
+#### JAVA后端
+
+[蜻蜓服务端qingtingjava-s-sever](https://gitee.com/youyacao/qingtingjava-s-sever)
+[蜻蜓后台管理端qingting-java-manager-client](https://gitee.com/youyacao/qingting-java-manager-client)
+#### 前端后端
+
+
+[蜻蜓v系统前端](https://gitee.com/youyacao/qingting-valley-flutter)
+[蜻蜓s系统前端](https://gitee.com/youyacao/qingting-s-uniapp)
+[蜻蜓T系统前端](https://gitee.com/youyacao/qingting-team-flutter)
+[蜻蜓q系统前端](https://gitee.com/youyacao/qingting-queen-uniapp)
+[蜻蜓f系统前端](https://gitee.com/youyacao/qingting-f-uniapp)
+
+
 #### 文件目录说明
 
-[蜻蜓S系统官方目录说明](https://doc.youyacao.com/web/#/8?page_id=649)
+[蜻蜓系统官方目录说明](https://doc.youyacao.com/web/#/8?page_id=649)
 
 
 
 #### API接口文档
 
 [点击查看API接口文档](https://doc.youyacao.com/web/#/16?page_id=93)
+
+[点击查看JAVA版API接口文档](https://doc.youyacao.com/web/#/18?page_id=226)
+
+
 
 
 #### 购买授权或技术支持
